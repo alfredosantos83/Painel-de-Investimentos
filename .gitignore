@@ -37,3 +37,10 @@ logs/
 # Ignorar arquivos temporários
 *.tmp
 *.temp
+
+# SonarQube/SonarCloud
+.sonar/
+.scannerwork/
+
+# JaCoCo
+*.exec

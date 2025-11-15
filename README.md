@@ -21,7 +21,7 @@ Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamen
 ## 🚀 Tecnologias
 
 - Java 21
-- Spring Boot 3.2.0
+- Spring Boot 3.5.0
 - Spring Data JPA
 - Spring Security + JWT
 - SQLite (pode usar SQL Server)
@@ -29,6 +29,8 @@ Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamen
 - OpenAPI/Swagger
 - Docker & Docker Compose
 - JUnit 5 + Mockito
+- JaCoCo (Code Coverage)
+- SonarCloud (Code Quality)
 
 ## 📦 Pré-requisitos
 
@@ -65,7 +67,7 @@ docker-compose up
 docker-compose down
 ```
 
-A aplicação estará disponível em: `http://localhost:8080/api`
+A aplicação estará disponível em: `http://localhost:8081/api`
 
 ## 📚 Documentação da API
 
@@ -73,7 +75,7 @@ A aplicação estará disponível em: `http://localhost:8080/api`
 
 Acesse a documentação interativa em:
 ```
-http://localhost:8080/api/swagger-ui.html
+http://localhost:8081/api/swagger-ui.html
 ```
 
 ### Autenticação
@@ -375,6 +377,37 @@ painel-investimentos/
 - [x] Motor de Recomendação
 - [x] Perfil de risco dinâmico
 - [x] Testes unitários
+- [x] SonarQube/SonarCloud configurado
+- [x] Análise de código com JaCoCo
+
+## 🔍 Qualidade de Código
+
+### SonarCloud
+
+O projeto está configurado com SonarCloud para análise contínua de qualidade de código.
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos83_Painel-de-Investimentos&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=alfredosantos83_Painel-de-Investimentos)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos83_Painel-de-Investimentos&metric=coverage)](https://sonarcloud.io/summary/new_code?id=alfredosantos83_Painel-de-Investimentos)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos83_Painel-de-Investimentos&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=alfredosantos83_Painel-de-Investimentos)
+
+### Executar análise localmente
+
+```bash
+# Executar testes com cobertura
+mvn clean verify
+
+# Executar análise do SonarQube (requer token)
+mvn sonar:sonar -Dsonar.token=YOUR_SONAR_TOKEN
+```
+
+### Configuração do SonarCloud
+
+1. Acesse [SonarCloud](https://sonarcloud.io)
+2. Faça login com sua conta GitHub
+3. Importe o projeto `alfredosantos83/Painel-de-Investimentos`
+4. Gere um token de autenticação
+5. Adicione o token como secret no GitHub: `SONAR_TOKEN`
+6. O workflow do GitHub Actions executará automaticamente a análise
 
 ## 📝 Licença
 
