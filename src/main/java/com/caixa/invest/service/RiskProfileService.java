@@ -2,6 +2,7 @@ package com.caixa.invest.service;
 
 import com.caixa.invest.domain.Client;
 import com.caixa.invest.domain.Investment;
+import com.caixa.invest.domain.Product;
 import com.caixa.invest.repository.ClientRepository;
 import com.caixa.invest.repository.InvestmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -118,7 +119,7 @@ public class RiskProfileService {
 
         // Pega o tipo mais investido
         Object[] maisInvestido = preferencias.get(0);
-        Investment.StatusInvestimento tipo = (Investment.StatusInvestimento) maisInvestido[0];
+        Product.TipoProduto tipo = (Product.TipoProduto) maisInvestido[0];
 
         // Mapeia preferência para pontuação
         // CDB, LCI, LCA, POUPANCA = conservador (10 pontos)

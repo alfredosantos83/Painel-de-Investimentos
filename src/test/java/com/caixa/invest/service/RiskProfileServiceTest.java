@@ -56,7 +56,7 @@ class RiskProfileServiceTest {
         when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
         when(investmentRepository.countMovimentacoesByClientSince(anyLong(), any())).thenReturn(2);
         when(investmentRepository.findPreferenciasByClient(anyLong()))
-                .thenReturn(Arrays.asList(new Object[]{Product.TipoProduto.CDB, 5L}));
+                .thenReturn(Arrays.<Object[]>asList(new Object[]{Product.TipoProduto.CDB, 5L}));
         when(clientRepository.save(any(Client.class))).thenReturn(client);
 
         // Act
@@ -76,7 +76,7 @@ class RiskProfileServiceTest {
         when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
         when(investmentRepository.countMovimentacoesByClientSince(anyLong(), any())).thenReturn(6);
         when(investmentRepository.findPreferenciasByClient(anyLong()))
-                .thenReturn(Arrays.asList(new Object[]{Product.TipoProduto.FUNDO_RENDA_FIXA, 3L}));
+                .thenReturn(Arrays.<Object[]>asList(new Object[]{Product.TipoProduto.FUNDO_RENDA_FIXA, 3L}));
         when(clientRepository.save(any(Client.class))).thenReturn(client);
 
         // Act
@@ -97,7 +97,7 @@ class RiskProfileServiceTest {
         when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
         when(investmentRepository.countMovimentacoesByClientSince(anyLong(), any())).thenReturn(15);
         when(investmentRepository.findPreferenciasByClient(anyLong()))
-                .thenReturn(Arrays.asList(new Object[]{Product.TipoProduto.FUNDO_MULTIMERCADO, 8L}));
+                .thenReturn(Arrays.<Object[]>asList(new Object[]{Product.TipoProduto.FUNDO_MULTIMERCADO, 8L}));
         when(clientRepository.save(any(Client.class))).thenReturn(client);
 
         // Act
