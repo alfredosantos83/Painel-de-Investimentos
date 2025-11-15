@@ -386,9 +386,9 @@ painel-investimentos/
 
 O projeto está configurado com SonarCloud para análise contínua de qualidade de código.
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos1983_Painel-de-Investimentos&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=alfredosantos1983_Painel-de-Investimentos)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos1983_Painel-de-Investimentos&metric=coverage)](https://sonarcloud.io/summary/new_code?id=alfredosantos1983_Painel-de-Investimentos)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos1983_Painel-de-Investimentos&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=alfredosantos1983_Painel-de-Investimentos)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos83_Painel-de-Investimentos&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=alfredosantos83_Painel-de-Investimentos)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos83_Painel-de-Investimentos&metric=coverage)](https://sonarcloud.io/summary/new_code?id=alfredosantos83_Painel-de-Investimentos)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos83_Painel-de-Investimentos&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=alfredosantos83_Painel-de-Investimentos)
 
 ### Executar análise localmente
 
@@ -404,7 +404,7 @@ mvn sonar:sonar -Dsonar.token=YOUR_SONAR_TOKEN
 
 1. Acesse [SonarCloud](https://sonarcloud.io)
 2. Faça login com sua conta GitHub
-3. Importe o projeto `alfredosantos1983/Painel-de-Investimentos`
+3. Importe o projeto `alfredosantos83/Painel-de-Investimentos`
 4. Gere um token de autenticação
 5. Adicione o token como secret no GitHub: `SONAR_TOKEN`
 6. O workflow do GitHub Actions executará automaticamente a análise
