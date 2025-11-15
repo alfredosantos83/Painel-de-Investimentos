@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  painel-investimentos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: painel-investimentos
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - JWT_SECRET=5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+    volumes:
+      - ./data:/app/data
+    networks:
+      - invest-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/api/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  invest-network:
+    driver: bridge
+
+volumes:
+  data:

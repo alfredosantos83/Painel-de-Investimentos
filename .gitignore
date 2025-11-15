@@ -1,0 +1,39 @@
+# Ignorar arquivos do Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Ignorar arquivos do IntelliJ
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Ignorar arquivos do Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# Ignorar arquivos do VS Code
+.vscode/
+
+# Ignorar arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar banco de dados SQLite
+*.db
+*.db-journal
+
+# Ignorar logs
+logs/
+*.log
+
+# Ignorar arquivos temporários
+*.tmp
+*.temp
