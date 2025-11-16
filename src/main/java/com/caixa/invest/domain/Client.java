@@ -1,10 +1,12 @@
 package com.caixa.invest.domain;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,14 +16,11 @@ import java.util.List;
 @Entity
 @Table(name = "clients")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Client {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Client extends PanacheEntity {
 
     @Column(nullable = false)
     private String nome;

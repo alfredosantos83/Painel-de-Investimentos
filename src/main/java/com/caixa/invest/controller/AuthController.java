@@ -1,52 +1,58 @@
 package com.caixa.invest.controller;
 
+import com.caixa.invest.domain.User;
 import com.caixa.invest.dto.request.LoginRequest;
 import com.caixa.invest.dto.response.AuthResponse;
 import com.caixa.invest.security.JwtTokenProvider;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.caixa.invest.service.AuthService;
+import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-@RestController
-@RequestMapping("/auth")
-@RequiredArgsConstructor
+@Path("/auth")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Autenticação", description = "APIs para autenticação JWT")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider tokenProvider;
+    @Inject
+    AuthService authService;
 
-    @PostMapping("/login")
+    @Inject
+    JwtTokenProvider tokenProvider;
+
+    @POST
+    @Path("/login")
     @Operation(summary = "Login", description = "Autentica usuário e retorna token JWT")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
+    public Response login(@Valid LoginRequest request) {
+        try {
+            User user = authService.authenticate(request.getUsername(), request.getPassword());
+            String token = tokenProvider.generateToken(user);
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String token = tokenProvider.generateToken(userDetails);
+            AuthResponse response = AuthResponse.builder()
+                    .token(token)
+                    .type("Bearer")
+                    .username(user.getUsername())
+                    .role("ROLE_" + user.getRole().name())
+                    .build();
 
-        String role = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .findFirst()
-                .orElse("ROLE_USER");
+            return Response.ok(response).build();
+        } catch (SecurityException e) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(new ErrorResponse(e.getMessage()))
+                    .build();
+        }
+    }
 
-        return ResponseEntity.ok(AuthResponse.builder()
-                .token(token)
-                .type("Bearer")
-                .username(userDetails.getUsername())
-                .role(role)
-                .build());
+    public static class ErrorResponse {
+        public String message;
+
+        public ErrorResponse(String message) {
+            this.message = message;
+        }
     }
 }

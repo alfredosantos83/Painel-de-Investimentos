@@ -1,24 +1,23 @@
 package com.caixa.invest.domain;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "telemetry")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Telemetry {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Telemetry extends PanacheEntity {
 
     @Column(name = "service_name", nullable = false)
     private String serviceName;

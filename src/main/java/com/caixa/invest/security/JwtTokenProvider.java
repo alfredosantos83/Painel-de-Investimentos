@@ -1,78 +1,41 @@
 package com.caixa.invest.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
+import com.caixa.invest.domain.User;
+import io.smallrye.jwt.build.Jwt;
+import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+import java.time.Duration;
+import java.util.HashSet;
+import java.util.Set;
 
-@Component
+@ApplicationScoped
 public class JwtTokenProvider {
 
-    @Value("${jwt.secret}")
-    private String secret;
+    @ConfigProperty(name = "jwt.secret")
+    String secret;
 
-    @Value("${jwt.expiration}")
-    private Long expiration;
+    @ConfigProperty(name = "jwt.expiration")
+    Long expiration;
 
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+    public String generateToken(User user) {
+        Set<String> roles = new HashSet<>();
+        roles.add(user.getRole().name());
+
+        return Jwt.issuer("painel-investimentos")
+                .upn(user.getUsername())
+                .groups(roles)
+                .claim("email", user.getEmail())
+                .claim("userId", user.id)
+                .expiresIn(Duration.ofMillis(expiration))
+                .sign();
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + expiration);
-
-        return Jwts.builder()
-                .claims(claims)
-                .subject(subject)
-                .issuedAt(now)
-                .expiration(expiryDate)
-                .signWith(getSignKey())
-                .compact();
-    }
-
-    private SecretKey getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getSignKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-    }
-
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public String generateToken(String username, Set<String> roles) {
+        return Jwt.issuer("painel-investimentos")
+                .upn(username)
+                .groups(roles)
+                .expiresIn(Duration.ofMillis(expiration))
+                .sign();
     }
 }

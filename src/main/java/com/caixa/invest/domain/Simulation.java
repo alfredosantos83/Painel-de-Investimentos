@@ -1,28 +1,24 @@
 package com.caixa.invest.domain;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "simulations")
-@EntityListeners(AuditingEntityListener.class)
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Simulation {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Simulation extends PanacheEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
@@ -44,7 +40,6 @@ public class Simulation {
     @Column(name = "prazo_meses", nullable = false)
     private Integer prazoMeses;
 
-    @CreatedDate
     @Column(name = "data_simulacao", nullable = false, updatable = false)
     private LocalDateTime dataSimulacao;
 
@@ -53,4 +48,11 @@ public class Simulation {
 
     @Column(name = "valor_liquido")
     private BigDecimal valorLiquido;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.dataSimulacao == null) {
+            this.dataSimulacao = LocalDateTime.now();
+        }
+    }
 }
