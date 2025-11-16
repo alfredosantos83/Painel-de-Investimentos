@@ -29,7 +29,7 @@ quarkus:
     info-description: API REST para análise de perfil de risco e simulação de investimentos
     
   swagger-ui:
-    path: /swagger-ui
+    path: /swagger-ui/
     always-include: true
     enable: true
     
