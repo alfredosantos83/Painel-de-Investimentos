@@ -5,7 +5,6 @@ import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeIn;
 import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
-import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 
 @OpenAPIDefinition(
@@ -13,8 +12,7 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
         title = "Painel de Investimentos API",
         version = "1.0.0",
         description = "API REST para análise de perfil de risco e simulação de investimentos"
-    ),
-    security = @SecurityRequirement(name = "jwt")
+    )
 )
 @SecurityScheme(
     securitySchemeName = "jwt",
