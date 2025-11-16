@@ -28,7 +28,7 @@ public class SecureController {
     @Path("/profile")
     @RolesAllowed({"USER", "ADMIN"})
     @Operation(summary = "Perfil do Usuário", description = "Retorna informações do usuário autenticado via JWT")
-    @SecurityRequirement(name = "bearer-jwt")
+    @SecurityRequirement(name = "jwt")
     public Map<String, Object> getProfile(@Context SecurityContext ctx) {
         Map<String, Object> profile = new HashMap<>();
         profile.put("username", jwt.getName());
@@ -45,7 +45,7 @@ public class SecureController {
     @Path("/admin")
     @RolesAllowed("ADMIN")
     @Operation(summary = "Admin Only", description = "Endpoint acessível apenas para administradores")
-    @SecurityRequirement(name = "bearer-jwt")
+    @SecurityRequirement(name = "jwt")
     public Map<String, String> adminOnly() {
         Map<String, String> result = new HashMap<>();
         result.put("message", "Bem-vindo, administrador!");
@@ -58,7 +58,7 @@ public class SecureController {
     @Path("/user")
     @RolesAllowed({"USER", "ADMIN"})
     @Operation(summary = "User Area", description = "Endpoint acessível para usuários autenticados")
-    @SecurityRequirement(name = "bearer-jwt")
+    @SecurityRequirement(name = "jwt")
     public Map<String, String> userArea() {
         Map<String, String> result = new HashMap<>();
         result.put("message", "Área do usuário");
