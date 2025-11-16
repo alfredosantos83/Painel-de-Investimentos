@@ -1,31 +1,34 @@
-version: '3.8'
-
 services:
   painel-investimentos:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: painel-investimentos
+    container_name: painel-investimentos-quarkus
     ports:
       - "8081:8081"
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - JWT_SECRET=5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
-    volumes:
-      - ./data:/app/data
+      # Quarkus Configuration
+      - QUARKUS_HTTP_PORT=8081
+      - QUARKUS_DATASOURCE_DB_KIND=h2
+      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:h2:mem:investimentos;DB_CLOSE_DELAY=-1
+      - QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION=drop-and-create
+      - JWT_EXPIRATION=86400000
+      # JVM Options
+      - JAVA_OPTS=-Xmx512m -Xms256m -XX:+UseContainerSupport
     networks:
       - invest-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8081/api/actuator/health"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8081/api/health-test"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+    labels:
+      - "com.docker.compose.project=painel-investimentos"
+      - "description=Painel de Investimentos - Quarkus 3.8.6 LTS"
 
 networks:
   invest-network:
     driver: bridge
-
-volumes:
   data:
