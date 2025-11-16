@@ -12,9 +12,6 @@ import java.util.Set;
 @ApplicationScoped
 public class JwtTokenProvider {
 
-    @ConfigProperty(name = "jwt.secret")
-    String secret;
-
     @ConfigProperty(name = "jwt.expiration")
     Long expiration;
 
