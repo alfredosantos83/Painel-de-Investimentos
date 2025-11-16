@@ -5,33 +5,29 @@ import com.caixa.invest.domain.Product;
 import com.caixa.invest.domain.Simulation;
 import com.caixa.invest.dto.request.SimulacaoRequest;
 import com.caixa.invest.dto.response.SimulacaoResponse;
-import com.caixa.invest.repository.ClientRepository;
-import com.caixa.invest.repository.ProductRepository;
-import com.caixa.invest.repository.SimulationRepository;
-import lombok.RequiredArgsConstructor;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
-@Service
-@RequiredArgsConstructor
+@ApplicationScoped
 @Slf4j
 public class SimulationService {
 
-    private final ClientRepository clientRepository;
-    private final ProductRepository productRepository;
-    private final SimulationRepository simulationRepository;
-    private final RiskProfileService riskProfileService;
+    @Inject
+    RiskProfileService riskProfileService;
 
     @Transactional
     public SimulacaoResponse simularInvestimento(SimulacaoRequest request) {
         // 1. Buscar e validar cliente
-        Client client = clientRepository.findById(request.getClienteId())
-            .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        Client client = Client.findById(request.getClienteId());
+        if (client == null) {
+            throw new RuntimeException("Cliente não encontrado");
+        }
 
         // 2. Converter string para enum
         Product.TipoProduto tipoProduto;
