@@ -116,7 +116,7 @@ A collection inclui:
 
 Execute a request **"Login Admin"** ou **"Login User"**:
 
-**Endpoint:** `POST http://localhost:8081/api/auth/login`
+**Endpoint:** `POST http://localhost:8081/auth/login`
 
 **Body (JSON):**
 ```json
@@ -142,7 +142,7 @@ Execute a request **"Login Admin"** ou **"Login User"**:
 
 Após o login, teste os endpoints da pasta **"Secured Endpoints"**:
 
-**Get Profile** - `GET /api/secure/profile`
+**Get Profile** - `GET /secure/profile`
 ```json
 {
   "username": "admin",
@@ -151,7 +151,7 @@ Após o login, teste os endpoints da pasta **"Secured Endpoints"**:
 }
 ```
 
-**Admin Area** - `GET /api/secure/admin` (somente ADMIN)
+**Admin Area** - `GET /secure/admin` (somente ADMIN)
 ```json
 {
   "message": "Bem-vindo, administrador!",
@@ -160,7 +160,7 @@ Após o login, teste os endpoints da pasta **"Secured Endpoints"**:
 }
 ```
 
-**User Area** - `GET /api/secure/user` (USER ou ADMIN)
+**User Area** - `GET /secure/user` (USER ou ADMIN)
 ```json
 {
   "message": "Área do usuário",
@@ -212,7 +212,7 @@ Execute o script de testes automatizado:
 
 ### Autenticação JWT
 
-**POST** `/api/auth/login`
+**POST** `/auth/login`
 
 ```json
 {
