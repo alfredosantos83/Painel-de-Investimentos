@@ -56,4 +56,38 @@ class JwtTokenProviderTest {
         assertNotNull(token2);
         assertNotEquals(token1, token2);
     }
+
+    @Test
+    void testGenerateTokenWithMultipleRoles() {
+        Set<String> roles = new HashSet<>();
+        roles.add("USER");
+        roles.add("ADMIN");
+        
+        String token = jwtTokenProvider.generateToken("testuser", roles);
+
+        assertNotNull(token);
+        assertFalse(token.isEmpty());
+        assertTrue(token.startsWith("eyJ"));
+    }
+
+    @Test
+    void testGenerateTokenWithSingleRole() {
+        Set<String> roles = new HashSet<>();
+        roles.add("USER");
+        
+        String token = jwtTokenProvider.generateToken("simpleuser", roles);
+
+        assertNotNull(token);
+        assertTrue(token.length() > 50);
+    }
+
+    @Test
+    void testGenerateTokenWithEmptyRoles() {
+        Set<String> roles = new HashSet<>();
+        
+        String token = jwtTokenProvider.generateToken("noroleuser", roles);
+
+        assertNotNull(token);
+        assertFalse(token.isEmpty());
+    }
 }
