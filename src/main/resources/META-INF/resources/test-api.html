@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test - Painel de Investimentos</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; margin-bottom: 30px; }
+        .section { margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        .section h2 { color: #0066cc; margin-bottom: 15px; font-size: 18px; }
+        button { background: #0066cc; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 10px; }
+        button:hover { background: #0052a3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .output { margin-top: 15px; padding: 15px; background: #f8f8f8; border-left: 3px solid #0066cc; font-family: monospace; font-size: 12px; white-space: pre-wrap; word-wrap: break-word; }
+        .success { border-left-color: #28a745; color: #28a745; }
+        .error { border-left-color: #dc3545; color: #dc3545; }
+        .token-display { background: #fff3cd; padding: 10px; border-radius: 4px; margin: 10px 0; font-size: 11px; word-break: break-all; }
+        input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 200px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 API Test - Painel de Investimentos</h1>
+        
+        <!-- Login Section -->
+        <div class="section">
+            <h2>1️⃣ Autenticação</h2>
+            <div>
+                <input type="text" id="username" placeholder="Username" value="admin">
+                <input type="password" id="password" placeholder="Password" value="password123">
+                <button onclick="login()">Login</button>
+            </div>
+            <div id="tokenDisplay" class="token-display" style="display:none;">
+                <strong>Token JWT:</strong><br>
+                <span id="tokenValue"></span>
+            </div>
+            <div id="loginOutput" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Protected Endpoints -->
+        <div class="section">
+            <h2>2️⃣ Endpoints Protegidos</h2>
+            <button onclick="getProfile()" id="btnProfile" disabled>GET /api/secure/profile</button>
+            <button onclick="getAdmin()" id="btnAdmin" disabled>GET /api/secure/admin</button>
+            <button onclick="getUser()" id="btnUser" disabled>GET /api/secure/user</button>
+            <div id="secureOutput" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Public Endpoints -->
+        <div class="section">
+            <h2>3️⃣ Endpoints Públicos</h2>
+            <button onclick="healthCheck()">GET /api/health-test</button>
+            <button onclick="debugUsers()">GET /api/debug/users</button>
+            <div id="publicOutput" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Security Tests -->
+        <div class="section">
+            <h2>4️⃣ Testes de Segurança</h2>
+            <button onclick="testWithoutToken()">Testar sem Token (401)</button>
+            <button onclick="testInvalidToken()">Testar Token Inválido (401)</button>
+            <button onclick="testUserAsAdmin()" id="btnUserAsAdmin" disabled>User → Admin (403)</button>
+            <div id="securityOutput" class="output" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        let token = null;
+        let userToken = null;
+        const baseUrl = 'http://localhost:8081';
+
+        function showOutput(elementId, content, isError = false) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = 'output ' + (isError ? 'error' : 'success');
+            element.textContent = content;
+        }
+
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${baseUrl}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+
+                const data = await response.json();
+                token = data.token;
+
+                // Store user token if logging in as user
+                if (username === 'user') {
+                    userToken = data.token;
+                }
+
+                document.getElementById('tokenValue').textContent = token;
+                document.getElementById('tokenDisplay').style.display = 'block';
+                
+                showOutput('loginOutput', `✅ Login bem-sucedido!\n\nUsername: ${data.username}\nRole: ${data.role}\nType: ${data.type}\n\nToken obtido e salvo automaticamente.`);
+
+                // Enable protected endpoint buttons
+                document.getElementById('btnProfile').disabled = false;
+                document.getElementById('btnAdmin').disabled = false;
+                document.getElementById('btnUser').disabled = false;
+                
+                if (userToken) {
+                    document.getElementById('btnUserAsAdmin').disabled = false;
+                }
+            } catch (error) {
+                showOutput('loginOutput', `❌ Erro no login:\n${error.message}`, true);
+            }
+        }
+
+        async function makeAuthenticatedRequest(url, outputId, customToken = null) {
+            try {
+                const useToken = customToken || token;
+                if (!useToken) {
+                    showOutput(outputId, '❌ Faça login primeiro!', true);
+                    return;
+                }
+
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${useToken}` }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showOutput(outputId, `❌ HTTP ${response.status}: ${response.statusText}\n\n${JSON.stringify(data, null, 2)}`, true);
+                    return;
+                }
+
+                showOutput(outputId, `✅ Sucesso!\n\n${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                showOutput(outputId, `❌ Erro:\n${error.message}`, true);
+            }
+        }
+
+        async function getProfile() {
+            await makeAuthenticatedRequest(`${baseUrl}/api/secure/profile`, 'secureOutput');
+        }
+
+        async function getAdmin() {
+            await makeAuthenticatedRequest(`${baseUrl}/api/secure/admin`, 'secureOutput');
+        }
+
+        async function getUser() {
+            await makeAuthenticatedRequest(`${baseUrl}/api/secure/user`, 'secureOutput');
+        }
+
+        async function healthCheck() {
+            try {
+                const response = await fetch(`${baseUrl}/api/health-test`);
+                const data = await response.json();
+                showOutput('publicOutput', `✅ ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                showOutput('publicOutput', `❌ Erro:\n${error.message}`, true);
+            }
+        }
+
+        async function debugUsers() {
+            try {
+                const response = await fetch(`${baseUrl}/api/debug/users`);
+                const data = await response.json();
+                showOutput('publicOutput', `✅ ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                showOutput('publicOutput', `❌ Erro:\n${error.message}`, true);
+            }
+        }
+
+        async function testWithoutToken() {
+            try {
+                const response = await fetch(`${baseUrl}/api/secure/profile`);
+                if (response.status === 401) {
+                    showOutput('securityOutput', `✅ Teste passou!\nSem token = 401 Unauthorized (esperado)`);
+                } else {
+                    showOutput('securityOutput', `❌ Teste falhou!\nDeveria retornar 401, mas retornou ${response.status}`, true);
+                }
+            } catch (error) {
+                showOutput('securityOutput', `❌ Erro:\n${error.message}`, true);
+            }
+        }
+
+        async function testInvalidToken() {
+            try {
+                const response = await fetch(`${baseUrl}/api/secure/profile`, {
+                    headers: { 'Authorization': 'Bearer token_invalido_123' }
+                });
+                if (response.status === 401) {
+                    showOutput('securityOutput', `✅ Teste passou!\nToken inválido = 401 Unauthorized (esperado)`);
+                } else {
+                    showOutput('securityOutput', `❌ Teste falhou!\nDeveria retornar 401, mas retornou ${response.status}`, true);
+                }
+            } catch (error) {
+                showOutput('securityOutput', `❌ Erro:\n${error.message}`, true);
+            }
+        }
+
+        async function testUserAsAdmin() {
+            if (!userToken) {
+                showOutput('securityOutput', '❌ Faça login como "user" primeiro!', true);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${baseUrl}/api/secure/admin`, {
+                    headers: { 'Authorization': `Bearer ${userToken}` }
+                });
+                if (response.status === 403) {
+                    showOutput('securityOutput', `✅ Teste passou!\nUSER tentando acessar área ADMIN = 403 Forbidden (esperado)`);
+                } else {
+                    showOutput('securityOutput', `❌ Teste falhou!\nDeveria retornar 403, mas retornou ${response.status}`, true);
+                }
+            } catch (error) {
+                showOutput('securityOutput', `❌ Erro:\n${error.message}`, true);
+            }
+        }
+    </script>
+</body>
+</html>
