@@ -90,12 +90,129 @@ A aplicação estará disponível em: `http://localhost:8081`
 
 Acesse a documentação interativa em:
 ```
-http://localhost:8081/q/swagger-ui
+http://localhost:8081/swagger-ui
+```
+
+> ⚠️ **Problema conhecido:** O botão "Authorize" do Swagger UI não funciona corretamente no Quarkus 3.8.6. Use **Postman** ou **test-api.ps1** para testar a API.
+
+### 🧪 Testando com Postman (Recomendado)
+
+#### 1. Importar Collection
+
+Importe o arquivo `Painel-Investimentos.postman_collection.json` no Postman:
+
+1. Abra o **Postman**
+2. Clique em **Import** (canto superior esquerdo)
+3. Selecione o arquivo `Painel-Investimentos.postman_collection.json`
+4. Clique **Import**
+
+A collection inclui:
+- ✅ 7 requests pré-configuradas
+- ✅ Variáveis automáticas (`base_url`, `jwt_token`)
+- ✅ Scripts de automação (token salvo automaticamente)
+- ✅ Autenticação Bearer configurada
+
+#### 2. Fazer Login
+
+Execute a request **"Login Admin"** ou **"Login User"**:
+
+**Endpoint:** `POST http://localhost:8081/api/auth/login`
+
+**Body (JSON):**
+```json
+{
+  "username": "admin",
+  "password": "password123"
+}
+```
+
+**Response:**
+```json
+{
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+  "type": "Bearer",
+  "username": "admin",
+  "role": "ROLE_ADMIN"
+}
+```
+
+> 💡 O token JWT é **automaticamente salvo** na variável `{{jwt_token}}` quando você usa a collection.
+
+#### 3. Testar Endpoints Protegidos
+
+Após o login, teste os endpoints da pasta **"Secured Endpoints"**:
+
+**Get Profile** - `GET /api/secure/profile`
+```json
+{
+  "username": "admin",
+  "email": "admin@caixa.com",
+  "roles": ["ADMIN"]
+}
+```
+
+**Admin Area** - `GET /api/secure/admin` (somente ADMIN)
+```json
+{
+  "message": "Bem-vindo, administrador!",
+  "user": "admin",
+  "access": "ADMIN"
+}
+```
+
+**User Area** - `GET /api/secure/user` (USER ou ADMIN)
+```json
+{
+  "message": "Área do usuário",
+  "user": "admin",
+  "access": "USER"
+}
+```
+
+#### 4. Credenciais Disponíveis
+
+| Usuário | Senha | Role |
+|---------|-------|------|
+| `admin` | `password123` | ADMIN |
+| `user` | `password123` | USER |
+
+#### 5. Configuração Manual (sem collection)
+
+Se preferir configurar manualmente:
+
+1. **Faça login** e copie o token da resposta
+2. Na aba **"Authorization"**:
+   - Type: `Bearer Token`
+   - Token: cole o token (sem "Bearer", sem aspas)
+3. Envie a request
+
+### 🧪 Testando com PowerShell
+
+Execute o script de testes automatizado:
+
+```powershell
+.\test-api.ps1
+```
+
+**Resultado:**
+```
+🧪 Executando Suite de Testes da API...
+1️⃣ Health Check ✅ Status: UP
+2️⃣ Login Admin ✅ Token obtido
+3️⃣ Login User ✅ Token obtido
+4️⃣ Perfil Admin ✅ Username: admin
+5️⃣ Área Admin (Admin) ✅ Acesso permitido
+6️⃣ Área User (Admin) ✅ Acesso permitido
+7️⃣ Área User (User) ✅ Acesso permitido
+8️⃣ Segurança: User → Admin ✅ Bloqueado (403)
+9️⃣ Segurança: Sem token ✅ Bloqueado (401)
+🔟 Segurança: Token inválido ✅ Bloqueado (401)
+✨ Todos os testes executados com sucesso!
 ```
 
 ### Autenticação JWT
 
-**POST** `/auth/login`
+**POST** `/api/auth/login`
 
 ```json
 {
@@ -107,7 +224,7 @@ http://localhost:8081/q/swagger-ui
 **Response:**
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
   "type": "Bearer",
   "username": "admin",
   "role": "ROLE_ADMIN"

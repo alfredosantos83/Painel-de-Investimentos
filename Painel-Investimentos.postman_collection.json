@@ -1,0 +1,258 @@
+{
+	"info": {
+		"name": "Painel de Investimentos - Quarkus API",
+		"description": "API de Painel de Investimentos migrada para Quarkus 3.8.6 com autenticação JWT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8081/api",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+									"    console.log(\"Token JWT salvo: \" + jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login com usuário ADMIN. O token JWT é automaticamente salvo na variável jwt_token."
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+									"    console.log(\"Token JWT salvo: \" + jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"user\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login com usuário USER (role limitada). O token JWT é automaticamente salvo."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints de autenticação"
+		},
+		{
+			"name": "Secured Endpoints",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/secure/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"secure",
+								"profile"
+							]
+						},
+						"description": "Retorna o perfil do usuário autenticado (USER ou ADMIN)"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Area",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/secure/admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"secure",
+								"admin"
+							]
+						},
+						"description": "Área restrita apenas para usuários com role ADMIN"
+					},
+					"response": []
+				},
+				{
+					"name": "User Area",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/secure/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"secure",
+								"user"
+							]
+						},
+						"description": "Área do usuário (USER ou ADMIN)"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints protegidos com JWT",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt_token}}",
+						"type": "string"
+					}
+				]
+			}
+		},
+		{
+			"name": "Public Endpoints",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health-test",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health-test"
+							]
+						},
+						"description": "Verifica o status da API"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints públicos (não requerem autenticação)"
+		},
+		{
+			"name": "Documentation",
+			"item": [
+				{
+					"name": "OpenAPI Spec",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/openapi",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"openapi"
+							]
+						},
+						"description": "Retorna a especificação OpenAPI 3.0 da API"
+					},
+					"response": []
+				}
+			],
+			"description": "Documentação da API"
+		}
+	]
+}
