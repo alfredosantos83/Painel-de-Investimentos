@@ -16,10 +16,10 @@ Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamen
 - ✅ Histórico de simulações e investimentos
 - ✅ Telemetria de serviços com volumes e tempos de resposta
 - ✅ Autenticação JWT (RS256 com SmallRye JWT)
-- ✅ Documentação OpenAPI/Swagger
+- ✅ Documentação via Postman Collection
 - ✅ Containerização com Docker
-- ✅ Testes unitários e integração (34 testes, 100% passando)
-- ✅ Cobertura de código (JaCoCo)
+- ✅ Testes unitários e integração (68 testes, 100% passando)
+- ✅ Cobertura de código (JaCoCo - 31%)
 
 ## 🚀 Tecnologias
 
@@ -30,7 +30,7 @@ Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamen
 - **SmallRye JWT** (MicroProfile JWT RBAC)
 - **H2 Database** (in-memory para testes)
 - **Lombok** (Builders e getters/setters)
-- **SmallRye OpenAPI** (Swagger UI)
+- **Postman** (API Testing & Documentation)
 - **Docker & Docker Compose**
 - **JUnit 5** + **Mockito** + **RestAssured**
 - **JaCoCo** (Code Coverage)
@@ -61,7 +61,7 @@ mvn quarkus:dev
 **Modo de desenvolvimento** (`quarkus:dev`):
 - Live reload automático
 - Dev UI: http://localhost:8081/q/dev
-- Swagger UI: http://localhost:8081/q/swagger-ui
+- API Base URL: http://localhost:8081
 
 ### Opção 2: Executar com Docker
 
@@ -80,22 +80,13 @@ A aplicação estará disponível em: `http://localhost:8081`
 
 **Endpoints principais:**
 - API: `http://localhost:8081`
-- Swagger UI: `http://localhost:8081/q/swagger-ui`
 - Health Check: `http://localhost:8081/q/health`
 - Metrics: `http://localhost:8081/q/metrics`
+- Dev UI: `http://localhost:8081/q/dev` (modo dev)
 
 ## 📚 Documentação da API
 
-### Swagger UI (OpenAPI 3.0)
-
-Acesse a documentação interativa em:
-```
-http://localhost:8081/swagger-ui
-```
-
-> ⚠️ **Problema conhecido:** O botão "Authorize" do Swagger UI não funciona corretamente no Quarkus 3.8.6. Use **Postman** ou **test-api.ps1** para testar a API.
-
-### 🧪 Testando com Postman (Recomendado)
+### 🧪 Testando com Postman
 
 #### 1. Importar Collection
 
@@ -434,16 +425,21 @@ mvn clean test jacoco:report
 ```
 
 **Status dos Testes:**
-- ✅ 34/34 testes passando (100%)
-- ✅ AuthControllerTest: 4 testes
-- ✅ SecureControllerTest: 11 testes (autenticação JWT completa)
+- ✅ 68/68 testes passando (100%)
+- ✅ AuthControllerTest: 7 testes
+- ✅ AuthControllerUnitTest: 3 testes (Mockito)
+- ✅ DebugControllerEnhancedTest: 6 testes
 - ✅ DebugControllerTest: 2 testes
+- ✅ DebugControllerUnitTest: 6 testes (Mockito)
+- ✅ SecureControllerTest: 11 testes (autenticação JWT completa)
 - ✅ HealthTestControllerTest: 2 testes
 - ✅ AuthServiceTest: 5 testes
-- ✅ JwtTokenProviderTest: 3 testes
+- ✅ JwtTokenProviderTest: 6 testes
+- ✅ JwtTokenProviderUnitTest: 6 testes (Mockito)
+- ✅ PasswordEncoderTest: 7 testes
 - ✅ UserTest: 4 testes
 - ✅ ClientTest: 3 testes
-- 📊 Cobertura: 20% (controllers: 40%)
+- 📊 Cobertura: 31% (controllers: 40%, security: 78%)
 
 ## 🔐 Segurança
 
@@ -512,7 +508,7 @@ painel-investimentos/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/caixa/invest/
-│   │   │   ├── config/          # OpenApiConfig (Swagger)
+│   │   │   ├── config/          # Configurações da aplicação
 │   │   │   ├── controller/      # REST Controllers (@Path)
 │   │   │   ├── domain/          # Entidades Panache (Active Record)
 │   │   │   ├── dto/             # Request/Response DTOs
@@ -555,9 +551,10 @@ painel-investimentos/
 - [x] Autenticação JWT (RS256 com SmallRye JWT)
 - [x] Motor de Recomendação
 - [x] Perfil de risco dinâmico
-- [x] Testes unitários e integração (34/34 passando)
-- [x] Análise de código com JaCoCo (20% cobertura)
+- [x] Testes unitários e integração (68/68 passando)
+- [x] Análise de código com JaCoCo (31% cobertura)
 - [x] Migração completa Spring Boot → Quarkus
+- [x] Documentação Postman Collection
 
 ## ⚡ Vantagens do Quarkus
 
@@ -591,11 +588,11 @@ mvn clean test jacoco:report
 ```
 
 **Métricas atuais:**
-- Cobertura total: 20%
+- Cobertura total: 31% ✅
 - Controllers: 40% ✅
+- Security: 78% ✅
+- Domain: 6%
 - Services: 0%
-- Domain: 0%
-- Security: 18%
 
 ### SonarQube Local
 
@@ -640,9 +637,11 @@ Este projeto foi desenvolvido para fins educacionais.
 ## 🙏 Agradecimentos
 
 - Projeto migrado com sucesso de **Spring Boot 3.5.0** para **Quarkus 3.8.6**
-- Todos os testes mantidos e funcionando (34/34 ✅)
+- Todos os testes mantidos e funcionando (68/68 ✅)
 - Autenticação JWT RS256 implementada com SmallRye
 - Performance e consumo de memória otimizados
+- Cobertura de testes aumentada de 21% para 31%
+- Documentação completa via Postman Collection
 
 ---
 
