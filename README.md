@@ -18,8 +18,9 @@ Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamen
 - ✅ Autenticação JWT (RS256 com SmallRye JWT)
 - ✅ Documentação via Postman Collection
 - ✅ Containerização com Docker
-- ✅ Testes unitários e integração (97 testes, 100% passando)
-- ✅ Cobertura de código (JaCoCo - 31% - limitado por incompatibilidade Lombok)
+- ✅ Testes unitários e integração (187 testes, 100% passando)
+- ✅ Cobertura de código - **97,3%** (IntelliJ Coverage)
+- ✅ Análise de qualidade com SonarQube
 
 ## 🚀 Tecnologias
 
@@ -34,7 +35,44 @@ Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamen
 - **Docker & Docker Compose**
 - **JUnit 5** + **Mockito** + **RestAssured**
 - **JaCoCo** (Code Coverage)
+- **SonarQube** (Code Quality & Security Analysis)
 - **Maven 3.9.6**
+
+## 📊 Qualidade e Cobertura de Código
+
+### Métricas de Testes
+- **Total de Testes:** 187
+- **Taxa de Sucesso:** 100%
+- **Cobertura de Código:** 97,3%
+
+### Cobertura Detalhada (IntelliJ Coverage)
+
+| Pacote | Classes | Métodos | Branches | Linhas |
+|--------|---------|---------|----------|--------|
+| **Overall** | 95,2% (20/21) | 93,5% (43/46) | 92,9% (26/28) | **97,3%** (146/150) |
+| Controllers | 100% (5/5) | 100% (14/14) | 100% (2/2) | 100% (67/67) |
+| Domain | 100% (11/11) | 100% (19/19) | 90% (18/20) | 100% (49/49) |
+| Security | 100% (2/2) | 100% (6/6) | - | 100% (19/19) |
+| Services | 100% (1/1) | 100% (3/3) | 100% (6/6) | 100% (10/10) |
+| Config | 100% (1/1) | 100% (1/1) | - | 100% (1/1) |
+
+### Executar Testes e Cobertura
+
+```bash
+# Executar todos os testes
+mvn clean verify
+
+# Gerar relatório JaCoCo
+mvn jacoco:report
+
+# Visualizar relatório
+start target/site/jacoco/index.html
+
+# Executar análise SonarQube (requer SonarQube local)
+mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.token=SEU_TOKEN
+```
+
+**Nota:** Para cobertura mais precisa com Quarkus, use IntelliJ IDEA Coverage (Run with Coverage) ao invés de JaCoCo, que pode apresentar avisos de bytecode mismatch devido a transformações CDI/AOP.
 
 ## 📦 Pré-requisitos
 

@@ -218,6 +218,27 @@
                             <dataFile>${project.build.directory}/jacoco.exec</dataFile>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.60</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
                 </executions>
                 <configuration>
                     <excludes>
@@ -231,6 +252,8 @@
                         <exclude>**/*EnhancedTest.class</exclude>
                         <exclude>**/*ValidationTest.class</exclude>
                     </excludes>
+                    <!-- Suprimir avisos de bytecode mismatch (normais com Quarkus CDI/AOP) -->
+                    <skip>false</skip>
                 </configuration>
             </plugin>
             
