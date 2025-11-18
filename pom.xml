@@ -86,10 +86,16 @@
             <artifactId>quarkus-smallrye-health</artifactId>
         </dependency>
         
-        <!-- OpenAPI/Swagger -->
+        <!-- OpenAPI -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-openapi</artifactId>
+        </dependency>
+        
+        <!-- Cache -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-cache</artifactId>
         </dependency>
         
         <!-- BCrypt for password hashing -->

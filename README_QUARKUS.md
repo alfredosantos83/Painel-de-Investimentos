@@ -10,7 +10,7 @@ API de análise de perfil de risco e simulação de investimentos migrada para *
 - **RESTEasy Reactive** (substituindo Spring MVC)
 - **SmallRye JWT** (substituindo Spring Security + JJWT)
 - **SQLite** (banco de dados)
-- **SmallRye OpenAPI** (Swagger/OpenAPI)
+- **SmallRye OpenAPI**
 - **Maven 3.9.6**
 - **Docker** (containerização)
 
@@ -143,11 +143,6 @@ docker-compose up --build
 | GET | `/api/v1/produtos-recomendados/{perfil}` | Produtos recomendados |
 | GET | `/api/v1/investimentos/{clienteId}` | Histórico de investimentos |
 | GET | `/api/v1/telemetria` | Dados de telemetria |
-
-### Documentação Interativa
-
-- **Swagger UI**: http://localhost:8081/api/swagger-ui
-- **OpenAPI Spec**: http://localhost:8081/api/api-docs
 
 ### Health Check
 
