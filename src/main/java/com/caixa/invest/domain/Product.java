@@ -2,21 +2,17 @@ package com.caixa.invest.domain;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
 @Data
-@EqualsAndHashCode(callSuper = false)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class Product extends PanacheEntity {
 
     @Column(nullable = false)
@@ -53,13 +49,6 @@ public class Product extends PanacheEntity {
 
     private String descricao;
 
-    @PrePersist
-    public void prePersist() {
-        if (this.ativo == null) {
-            this.ativo = true;
-        }
-    }
-
     public enum TipoProduto {
         CDB,
         LCI,
@@ -77,4 +66,12 @@ public class Product extends PanacheEntity {
         MEDIO,
         ALTO
     }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.ativo == null) {
+            this.ativo = true;
+        }
+    }
 }
+
