@@ -8,16 +8,12 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
-import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import java.util.List;
 
 @Path("/api/products")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Tag(name = "Produtos", description = "Gestão de produtos de investimento")
 @Authenticated
 public class ProductController {
 
@@ -29,7 +25,6 @@ public class ProductController {
      */
     @GET
     @Path("/all")
-    @Operation(summary = "Listar todos os produtos", description = "Retorna todos os produtos ativos (resultado cacheado)")
     public Response listAll() {
         List<Product> products = productService.findAllActive();
         return Response.ok(products).build();
@@ -39,12 +34,9 @@ public class ProductController {
      * Lista produtos com paginação
      */
     @GET
-    @Operation(summary = "Listar produtos paginados", description = "Retorna produtos ativos com paginação")
     public Response list(
-            @Parameter(description = "Número da página (base 0)", example = "0")
             @QueryParam("page") @DefaultValue("0") int page,
             
-            @Parameter(description = "Tamanho da página", example = "10")
             @QueryParam("size") @DefaultValue("10") int size) {
         
         if (page < 0) {
@@ -72,9 +64,7 @@ public class ProductController {
      */
     @GET
     @Path("/tipo/{tipo}")
-    @Operation(summary = "Buscar produtos por tipo", description = "Retorna produtos filtrados por tipo (resultado cacheado)")
     public Response findByType(
-            @Parameter(description = "Tipo do produto", example = "CDB")
             @PathParam("tipo") Product.TipoProduto tipo) {
         
         List<Product> products = productService.findByType(tipo);
@@ -86,9 +76,7 @@ public class ProductController {
      */
     @GET
     @Path("/risco/{risco}")
-    @Operation(summary = "Buscar produtos por risco", description = "Retorna produtos filtrados por nível de risco (resultado cacheado)")
     public Response findByRisk(
-            @Parameter(description = "Nível de risco", example = "BAIXO")
             @PathParam("risco") Product.NivelRisco risco) {
         
         List<Product> products = productService.findByRisk(risco);
@@ -100,9 +88,7 @@ public class ProductController {
      */
     @GET
     @Path("/{id}")
-    @Operation(summary = "Buscar produto por ID", description = "Retorna um produto específico (resultado cacheado)")
     public Response findById(
-            @Parameter(description = "ID do produto", example = "1")
             @PathParam("id") Long id) {
         
         Product product = productService.findById(id);

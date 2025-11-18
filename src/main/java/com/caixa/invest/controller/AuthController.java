@@ -10,13 +10,10 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Path("/auth")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Tag(name = "Autenticação", description = "APIs para autenticação JWT")
 public class AuthController {
 
     @Inject
@@ -27,7 +24,6 @@ public class AuthController {
 
     @POST
     @Path("/login")
-    @Operation(summary = "Login", description = "Autentica usuário e retorna token JWT")
     public Response login(@Valid LoginRequest request) {
         try {
             User user = authService.authenticate(request.getUsername(), request.getPassword());
