@@ -25,6 +25,7 @@
         <sonar.organization>alfredosantos83-2</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/jacoco-report/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <quarkus.jacoco.excludes>**/generated/**,**/dto/**</quarkus.jacoco.excludes>
     </properties>
     
     <dependencyManagement>
@@ -166,6 +167,7 @@
                     <systemPropertyVariables>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         <maven.home>${maven.home}</maven.home>
+                        <quarkus.test.coverage>true</quarkus.test.coverage>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
@@ -201,15 +203,35 @@
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                        <configuration>
+                            <append>true</append>
+                            <destFile>${project.build.directory}/jacoco.exec</destFile>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>report</id>
-                        <phase>test</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/jacoco.exec</dataFile>
+                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/generated/**</exclude>
+                        <exclude>**/*_ClientProxy*</exclude>
+                        <exclude>**/*_Subclass*</exclude>
+                        <exclude>**/*$$CDIWrapper*</exclude>
+                        <exclude>**/*Test.class</exclude>
+                        <exclude>**/*IntegrationTest.class</exclude>
+                        <exclude>**/*UnitTest.class</exclude>
+                        <exclude>**/*EnhancedTest.class</exclude>
+                        <exclude>**/*ValidationTest.class</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
             
             <!-- SonarQube Scanner Plugin -->

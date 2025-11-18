@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import javax.annotation.processing.Generated;
 import java.time.LocalDateTime;
 
 @Entity
@@ -36,6 +37,7 @@ public class Telemetry extends PanacheEntity {
     @Column(name = "success")
     private Boolean success;
 
+    @Generated("JPA")
     @PrePersist
     public void prePersist() {
         this.timestamp = LocalDateTime.now();

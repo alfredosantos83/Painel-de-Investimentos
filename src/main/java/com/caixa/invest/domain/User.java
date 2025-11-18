@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import javax.annotation.processing.Generated;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,6 +34,7 @@ public class User extends PanacheEntity implements Principal {
     @Column(nullable = false)
     private Boolean enabled;
 
+    @Generated("JPA")
     @PrePersist
     public void prePersist() {
         if (this.enabled == null) {

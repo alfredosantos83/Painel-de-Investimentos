@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import javax.annotation.processing.Generated;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class Client extends PanacheEntity {
     @Builder.Default
     private List<Simulation> simulations = new ArrayList<>();
 
+    @Generated("JPA")
     @PrePersist
     public void prePersist() {
         this.dataCadastro = LocalDateTime.now();

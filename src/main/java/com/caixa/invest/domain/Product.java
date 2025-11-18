@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import javax.annotation.processing.Generated;
 import java.math.BigDecimal;
 
 @Entity
@@ -67,6 +68,7 @@ public class Product extends PanacheEntity {
         ALTO
     }
 
+    @Generated("JPA")
     @PrePersist
     public void prePersist() {
         if (this.ativo == null) {

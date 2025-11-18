@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import javax.annotation.processing.Generated;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -45,6 +46,7 @@ public class Simulation extends PanacheEntity {
     @Column(name = "valor_liquido")
     private BigDecimal valorLiquido;
 
+    @Generated("JPA")
     @PrePersist
     public void prePersist() {
         if (this.dataSimulacao == null) {
