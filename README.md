@@ -34,8 +34,9 @@ Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamen
 - **Postman** (API Testing & Documentation)
 - **Docker & Docker Compose**
 - **JUnit 5** + **Mockito** + **RestAssured**
-- **JaCoCo** (Code Coverage)
-- **SonarQube** (Code Quality & Security Analysis)
+- **IntelliJ IDEA Coverage** (Code Coverage - 97.3%)
+- **JaCoCo** (Code Coverage opcional - 31%)
+- **SonarQube** (Code Quality & Security Analysis - opcional)
 - **Maven 3.9.6**
 
 ## 📊 Qualidade e Cobertura de Código
@@ -245,13 +246,17 @@ Se preferir configurar manualmente:
 
 ### 🧪 Testando com PowerShell
 
-Execute o script de testes automatizado:
+**Pré-requisito:** Quarkus deve estar rodando em `http://localhost:8081`
 
 ```powershell
+# Terminal 1: Iniciar Quarkus
+mvn compile quarkus:dev
+
+# Terminal 2: Executar script de testes
 .\test-api.ps1
 ```
 
-**Resultado:**
+**Resultado esperado:**
 ```
 🧪 Executando Suite de Testes da API...
 1️⃣ Health Check ✅ Status: UP
@@ -266,6 +271,13 @@ Execute o script de testes automatizado:
 🔟 Segurança: Token inválido ✅ Bloqueado (401)
 ✨ Todos os testes executados com sucesso!
 ```
+
+**O que o script testa:**
+- ✅ Health checks (liveness/readiness)
+- ✅ Autenticação JWT (login admin e user)
+- ✅ Autorização RBAC (perfis USER e ADMIN)
+- ✅ Proteção de rotas (401/403)
+- ✅ Validação de tokens inválidos
 
 ### Autenticação JWT
 
@@ -479,9 +491,34 @@ O sistema utiliza um algoritmo de pontuação baseado em três critérios:
 
 ## 🧪 Testes
 
+### Executar Todos os Testes
+
 ```bash
-# Executar todos os testes
+# Executar todos os 187 testes
 mvn test
+
+# Executar com build completo e verificação
+mvn clean verify
+```
+
+**Resultado esperado:**
+```
+Tests run: 187, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
+Total time: ~58 segundos
+```
+
+### Executar Testes Específicos
+
+```bash
+# Executar uma classe de teste específica
+mvn test -Dtest=AuthControllerTest
+
+# Executar múltiplas classes
+mvn test -Dtest=AuthControllerTest,SecureControllerTest
+
+# Executar por padrão de nome
+mvn test -Dtest=*ControllerTest
 ```
 
 ### Executar com Cobertura
