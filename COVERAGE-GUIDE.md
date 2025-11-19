@@ -23,10 +23,10 @@
 
 ### ⚙️ Opção 2: JaCoCo via Maven (Atual)
 **Vantagens:**
-- ✅ Integrado ao build Maven
-- ✅ Geração automática na fase `verify`
-- ✅ Compatível com SonarQube
-- ⚠️ Avisos de bytecode (normais com Quarkus)
+✅ Integrado ao build Maven
+✅ Geração automática na fase `verify`
+✅ Compatível com SonarQube
+⚠️ Avisos de bytecode (normais com Quarkus)
 
 **Comandos:**
 ```bash
@@ -44,10 +44,10 @@ start target/site/jacoco/index.html
 
 **Nota sobre avisos:**
 Os avisos de bytecode mismatch são **NORMAIS** e **ESPERADOS** em projetos Quarkus devido a:
-- CDI proxies (`*_ClientProxy`)
-- AOP enhancements (`*_Subclass`)
-- Panache bytecode enhancement
-- CDI wrappers (`*$$CDIWrapper`)
+CDI proxies (`*_ClientProxy`)
+AOP enhancements (`*_Subclass`)
+Panache bytecode enhancement
+CDI wrappers (`*$$CDIWrapper`)
 
 Eles **NÃO afetam** a execução dos testes ou a análise de cobertura real.
 
@@ -76,8 +76,8 @@ mvn clean verify sonar:sonar `
 ## 📈 Status Atual do Projeto
 
 ### Métricas de Testes
-- **Total de Testes:** 187
-- **Sucessos:** 187 (100%)
+**Total de Testes:** 187
+**Sucessos:** 187 (100%)
 - **Falhas:** 0
 - **Cobertura JaCoCo:** 31% (limitações com Lombok/Quarkus bytecode)
 - **Cobertura Real (IntelliJ):** **97,3%** ✅

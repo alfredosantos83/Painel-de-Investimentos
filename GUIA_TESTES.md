@@ -60,7 +60,7 @@ Para testes usando interface gráfica, consulte o guia dedicado:
 4. Analisar variáveis e fluxo de execução
 
 **✨ Vantagens IntelliJ:**
-- ✅ Cobertura precisa (97.3% vs 31% JaCoCo)
+✅ Cobertura precisa (97.3% vs 52% JaCoCo)
 - ✅ Interface visual intuitiva
 - ✅ Debug interativo com breakpoints
 - ✅ Execução seletiva (classe, método, pacote)
