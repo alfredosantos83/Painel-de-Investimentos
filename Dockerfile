@@ -13,25 +13,31 @@ RUN mvn dependency:go-offline -B
 COPY src ./src
 
 # Build the application
-RUN mvn clean package -DskipTests -Dquarkus.package.type=uber-jar
+# O formato 'fast-jar' é o padrão do Quarkus e otimizado para containers
+RUN mvn package -DskipTests
 
 ####
 # Stage 2: Create the runtime image
 ####
 FROM eclipse-temurin:21-jre-alpine
 
-WORKDIR /app
-
-# Copy the uber-jar from build stage
-COPY --from=build /app/target/*-runner.jar app.jar
-
 # Create non-root user
 RUN addgroup -S quarkus && adduser -S quarkus -G quarkus
-USER quarkus
+
+WORKDIR /app
+
+# Copia as dependências (camada que raramente muda)
+COPY --from=build --chown=quarkus:quarkus /app/target/quarkus-app/lib/ /app/lib/
+# Copia o código da aplicação (camada que muda com frequência)
+COPY --from=build --chown=quarkus:quarkus /app/target/quarkus-app/*.jar /app/
+COPY --from=build --chown=quarkus:quarkus /app/target/quarkus-app/app/ /app/app/
+COPY --from=build --chown=quarkus:quarkus /app/target/quarkus-app/quarkus/ /app/quarkus/
 
 EXPOSE 8081
+USER quarkus
 
 # Set JVM options for container
 ENV JAVA_OPTS="-Xmx512m -Xms256m -XX:+UseContainerSupport"
 
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+# Usa o formato 'exec' para que o processo Java seja o PID 1 e receba sinais do sistema
+ENTRYPOINT ["java", "-jar", "quarkus-run.jar"]

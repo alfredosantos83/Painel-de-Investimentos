@@ -1,6 +1,5 @@
 package com.caixa.invest.controller;
 
-import com.caixa.invest.domain.User;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
@@ -98,5 +97,41 @@ public class DebugControllerEnhancedTest {
             .contentType(ContentType.JSON)
             .body("password", equalTo(""))
             .body("hash", notNullValue());
+    }
+
+    @Test
+    void testPasswordMatchSuccess() {
+        given()
+            .queryParam("username", "admin")
+            .queryParam("password", "password123")
+        .when()
+            .get("/debug/test-password")
+        .then()
+            .statusCode(200)
+            .body("passwordMatches", is(true));
+    }
+
+    @Test
+    void testPasswordMatchFail() {
+        given()
+            .queryParam("username", "admin")
+            .queryParam("password", "wrongpass")
+        .when()
+            .get("/debug/test-password")
+        .then()
+            .statusCode(200)
+            .body("passwordMatches", is(false));
+    }
+
+    @Test
+    void testPasswordUserNotFound() {
+        given()
+            .queryParam("username", "notfound")
+            .queryParam("password", "any")
+        .when()
+            .get("/debug/test-password")
+        .then()
+            .statusCode(200)
+            .body("error", is("Usuário não encontrado"));
     }
 }

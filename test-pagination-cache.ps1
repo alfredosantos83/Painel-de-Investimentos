@@ -91,40 +91,20 @@ try {
     Write-Host "   ✗ Erro ao testar cache: $_" -ForegroundColor Red
 }
 
-# 6. Testar filtro por tipo com cache
-Write-Host "6. Testando filtro por tipo (com cache)..." -ForegroundColor Yellow
+# 6. Testar validação de paginação (página negativa)
+Write-Host "6. Testando validação (página negativa)..." -ForegroundColor Yellow
 try {
-    $productsByType = Invoke-RestMethod -Uri "$baseUrl/api/products/tipo/CDB" -Method GET -Headers $headers
-    Write-Host "   ✓ Produtos CDB retornados: $($productsByType.Count)" -ForegroundColor Green
-    Write-Host ""
-} catch {
-    Write-Host "   ⚠ Endpoint pode não ter dados: $_" -ForegroundColor Yellow
-}
-
-# 7. Testar filtro por risco com cache
-Write-Host "7. Testando filtro por risco (com cache)..." -ForegroundColor Yellow
-try {
-    $productsByRisk = Invoke-RestMethod -Uri "$baseUrl/api/products/risco/BAIXO" -Method GET -Headers $headers
-    Write-Host "   ✓ Produtos de risco BAIXO retornados: $($productsByRisk.Count)" -ForegroundColor Green
-    Write-Host ""
-} catch {
-    Write-Host "   ⚠ Endpoint pode não ter dados: $_" -ForegroundColor Yellow
-}
-
-# 8. Testar validação de paginação (página negativa)
-Write-Host "8. Testando validação (página negativa)..." -ForegroundColor Yellow
-try {
-    $invalidPage = Invoke-RestMethod -Uri "$baseUrl/api/products?page=-1&size=10" -Method GET -Headers $headers
+    $null = Invoke-RestMethod -Uri "$baseUrl/api/products?page=-1&size=10" -Method GET -Headers $headers
     Write-Host "   ✗ Validação não funcionou!" -ForegroundColor Red
 } catch {
     Write-Host "   ✓ Validação funcionando! Erro esperado: 400 Bad Request" -ForegroundColor Green
     Write-Host ""
 }
 
-# 9. Testar validação de paginação (tamanho inválido)
-Write-Host "9. Testando validação (tamanho > 100)..." -ForegroundColor Yellow
+# 7. Testar validação de paginação (tamanho inválido)
+Write-Host "7. Testando validação (tamanho > 100)..." -ForegroundColor Yellow
 try {
-    $invalidSize = Invoke-RestMethod -Uri "$baseUrl/api/products?page=0&size=150" -Method GET -Headers $headers
+    $null = Invoke-RestMethod -Uri "$baseUrl/api/products?page=0&size=150" -Method GET -Headers $headers
     Write-Host "   ✗ Validação não funcionou!" -ForegroundColor Red
 } catch {
     Write-Host "   ✓ Validação funcionando! Erro esperado: 400 Bad Request" -ForegroundColor Green

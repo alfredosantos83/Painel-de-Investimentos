@@ -126,6 +126,180 @@
 			"description": "Endpoints de autenticação"
 		},
 		{
+			"name": "Authentication Failures",
+			"item": [
+				{
+					"name": "Login - Wrong Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status should be 401 Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"wrongpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Tenta logar com senha incorreta. Deve retornar 401."
+					}
+				},
+				{
+					"name": "Login - Non-existent User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status should be 401 Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"nonexistentuser\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Tenta logar com um usuário que não existe. Deve retornar 401."
+					}
+				},
+				{
+					"name": "Login - Missing Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status should be 400 Bad Request\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Tenta logar sem o campo de senha. Deve retornar 400."
+					}
+				},
+				{
+					"name": "Login - Malformed JSON",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status should be 400 Bad Request\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"password123\"\n"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Tenta logar com um JSON malformado. Deve retornar 400."
+					}
+				}
+			],
+			"description": "Testes de cenários de falha na autenticação"
+		},
+		{
 			"name": "Secured Endpoints",
 			"item": [
 				{
@@ -224,6 +398,258 @@
 				}
 			],
 			"description": "Endpoints públicos (não requerem autenticação)"
+		}
+		,
+		{
+			"name": "Pagination & Cache",
+			"item": [
+				{
+					"name": "Paginação - Página 0 (5 itens)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Estrutura paginada correta\", () => {",
+									"    const data = pm.response.json();",
+									"    pm.expect(data).to.have.property('items');",
+									"    pm.expect(data).to.have.property('page');",
+									"    pm.expect(data).to.have.property('size');",
+									"    pm.expect(data).to.have.property('total');",
+									"    pm.expect(data).to.have.property('totalPages');",
+									"});",
+									"pm.test(\"Página 0 com 5 itens\", () => {",
+									"    const data = pm.response.json();",
+									"    pm.expect(data.page).to.eql(0);",
+									"    pm.expect(data.size).to.eql(5);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products?page=0&size=5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Paginação - Página 1 (3 itens)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Página 1 com 3 itens\", () => {",
+									"    const data = pm.response.json();",
+									"    pm.expect(data.page).to.eql(1);",
+									"    pm.expect(data.size).to.eql(3);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products?page=1&size=3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "3"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Cache - Todos os Produtos (1ª chamada)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"const time = pm.response.responseTime;",
+									"pm.collectionVariables.set(\"firstCallTime\", time);",
+									"console.log(`⏱️ Tempo 1ª chamada (SEM cache): ${time}ms`);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"all"
+							]
+						}
+					}
+				},
+				{
+					"name": "Cache - Todos os Produtos (2ª chamada COM cache)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"const firstTime = parseInt(pm.collectionVariables.get(\"firstCallTime\"));",
+									"const secondTime = pm.response.responseTime;",
+									"console.log(`⏱️ Tempo 1ª chamada: ${firstTime}ms`);",
+									"console.log(`⏱️ Tempo 2ª chamada (COM cache): ${secondTime}ms`);",
+									"pm.test(\"Cache funcionando - 2ª chamada mais rápida\", () => {",
+									"    pm.expect(secondTime).to.be.below(firstTime);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"all"
+							]
+						}
+					}
+				},
+				{
+					"name": "Validação - Página Negativa (400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 Bad Request\", () => {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products?page=-1&size=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "-1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Validação - Tamanho > 100 (400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 Bad Request\", () => {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products?page=0&size=150",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "150"
+								}
+							]
+						}
+					}
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt_token}}",
+						"type": "string"
+					}
+				]
+			}
 		}
 	]
 }

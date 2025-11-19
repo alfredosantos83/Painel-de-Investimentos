@@ -843,6 +843,8 @@ Invoke-RestMethod http://localhost:8081/q/health/ready
 ## 📖 Documentação Adicional
 
 - [README_QUARKUS.md](README_QUARKUS.md) - Guia completo da migração Spring Boot → Quarkus
+- [DOCKER-OPTIMIZATION.md](DOCKER-OPTIMIZATION.md) - Otimizações Docker Fast-Jar e cache de layers
+- [JACOCO-REPORT-SUMMARY.md](JACOCO-REPORT-SUMMARY.md) - Análise comparativa JaCoCo vs IntelliJ IDEA Coverage
 - [Quarkus Documentation](https://quarkus.io/guides/) - Documentação oficial
 - [SmallRye JWT](https://smallrye.io/smallrye-jwt/) - JWT RBAC implementation
 
