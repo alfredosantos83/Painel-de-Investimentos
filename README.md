@@ -58,24 +58,49 @@ Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamen
 
 ### Executar Testes e Cobertura
 
+#### Opção 1: IntelliJ IDEA (Recomendado)
+
+**Executar Todos os Testes com Cobertura:**
+1. Abrir IntelliJ IDEA
+2. Botão direito na pasta `src/test/java`
+3. Selecionar **"Run Tests in 'invest' with Coverage"** (ícone de escudo verde)
+4. Aguardar execução completa dos 187 testes
+5. Visualizar relatório detalhado no painel "Coverage" (lateral direita)
+
+**Vantagens:**
+- ✅ 97.3% de cobertura precisa (vs 31% do JaCoCo)
+- ✅ Compatível com Lombok e transformações Quarkus CDI/AOP
+- ✅ Relatório visual interativo em tempo real
+- ✅ Destaque de linhas cobertas/não cobertas no editor
+
+#### Opção 2: Maven (Linha de Comando)
+
 ```bash
 # Executar todos os testes
+mvn clean test
+
+# Verificar build completo com testes
 mvn clean verify
+```
 
-# Gerar relatório de cobertura
-Utilizar IntelliJ IDEA Coverage (Run with Coverage)
+#### Opção 3: JaCoCo (Opcional - Menos Preciso)
 
+```bash
 # Gerar relatório JaCoCo
-mvn jacoco:report
+mvn clean test jacoco:report
 
-# Visualizar relatório
+# Visualizar relatório HTML
 start target/site/jacoco/index.html
+```
 
+**⚠️ Limitação:** JaCoCo reporta apenas 31% de cobertura devido a incompatibilidade com bytecode gerado por Lombok e transformações Quarkus. Use IntelliJ IDEA Coverage para métricas precisas.
+
+#### Análise SonarQube (Opcional)
+
+```bash
 # Executar análise SonarQube (requer SonarQube local)
 mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.token=SEU_TOKEN
 ```
-
-**Nota:** Para cobertura mais precisa com Quarkus, use IntelliJ IDEA Coverage (Run with Coverage) ao invés de JaCoCo, que pode apresentar avisos de bytecode mismatch devido a transformações CDI/AOP.
 
 ## 📦 Pré-requisitos
 
@@ -457,20 +482,33 @@ O sistema utiliza um algoritmo de pontuação baseado em três critérios:
 ```bash
 # Executar todos os testes
 mvn test
-
-# Executar com cobertura (IntelliJ IDEA - Recomendado)
-# No IntelliJ: Clique com botão direito no projeto > "Run with Coverage"
-# Resultado: 97.3% de cobertura (146/150 linhas)
-
-# Executar com cobertura (JaCoCo - pode apresentar warnings)
-mvn clean test jacoco:report
-
-# Ver relatório de cobertura JaCoCo
-# Abrir: target/site/jacoco/index.html
 ```
 
+### Executar com Cobertura
+
+**Recomendado: IntelliJ IDEA Coverage**
+
+1. Abrir IntelliJ IDEA
+2. Botão direito na pasta `src/test/java` (ou no projeto)
+3. Selecionar **"Run Tests in 'invest' with Coverage"**
+4. Visualizar relatório no painel "Coverage" (lateral direita)
+
+**Resultado:** 97.3% de cobertura (146/150 linhas)
+
+**Opcional: JaCoCo (via Maven)**
+
+```bash
+# Gerar relatório JaCoCo
+mvn clean test jacoco:report
+
+# Visualizar relatório HTML
+start target/site/jacoco/index.html
+```
+
+**⚠️ Nota:** JaCoCo reporta apenas 31% de cobertura devido a incompatibilidade com Lombok e transformações Quarkus. Use IntelliJ IDEA Coverage para métricas precisas.
+
 **Status dos Testes:**
-- ✅ 97/97 testes passando (100%)
+- ✅ 187/187 testes passando (100%)
 - ✅ AuthControllerTest: 7 testes (integração)
 - ✅ AuthControllerUnitTest: 3 testes (Mockito)
 - ✅ DebugControllerEnhancedTest: 6 testes
@@ -567,12 +605,10 @@ painel-investimentos/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/caixa/invest/
-│   │   │   ├── config/          # Configurações da aplicação
 │   │   │   ├── controller/      # REST Controllers (@Path)
 │   │   │   ├── domain/          # Entidades Panache (Active Record)
 │   │   │   ├── dto/             # Request/Response DTOs
 │   │   │   ├── exception/       # Exception handlers
-│   │   │   ├── repository/      # Repositories Panache
 │   │   │   ├── security/        # JWT Provider e Security Config
 │   │   │   └── service/         # Lógica de negócio
 │   │   └── resources/
@@ -582,7 +618,7 @@ painel-investimentos/
 │   │           └── resources/
 │   │               ├── publicKey.pem   # Chave pública JWT
 │   │               └── privateKey.pem  # Chave privada JWT
-│   └── test/                    # Testes (34 testes)
+│   └── test/                    # Testes (187 testes - 100% passing)
 │       └── java/com/caixa/invest/
 │           ├── controller/      # Testes REST (AuthController, SecureController)
 │           ├── domain/          # Testes de entidades
@@ -591,6 +627,7 @@ painel-investimentos/
 ├── docker-compose.yml
 ├── Dockerfile
 ├── pom.xml
+├── Painel-Investimentos.postman_collection.json  # Coleção Postman
 └── README.md
 ```
 
@@ -610,10 +647,12 @@ painel-investimentos/
 - [x] Autenticação JWT (RS256 com SmallRye JWT)
 - [x] Motor de Recomendação
 - [x] Perfil de risco dinâmico
-- [x] Testes unitários e integração (68/68 passando)
-- [x] Análise de código com JaCoCo (31% cobertura)
+- [x] Testes unitários e integração (187/187 passando - 100%)
+- [x] Análise de código com IntelliJ IDEA Coverage (97.3% cobertura)
+- [x] Análise opcional com JaCoCo (31% - limitações com Lombok/Quarkus)
 - [x] Migração completa Spring Boot → Quarkus
-- [x] Documentação Postman Collection
+- [x] Documentação via Postman Collection
+- [x] RESTEasy Reactive (base dependency)
 
 ## ⚡ Vantagens do Quarkus
 
@@ -634,54 +673,66 @@ painel-investimentos/
 
 ## 🔍 Qualidade de Código
 
-### IntelliJ IDEA Coverage (Recomendado)
+### IntelliJ IDEA Coverage (Recomendado) ⭐
 
-Execute os testes com cobertura no IntelliJ IDEA:
+**Como executar:**
+
+1. Abrir IntelliJ IDEA
+2. Botão direito na pasta `src/test/java` (ou no projeto)
+3. Selecionar **"Run Tests in 'invest' with Coverage"**
+4. Visualizar relatório detalhado no painel "Coverage" (lateral direita)
+
+**Métricas IntelliJ IDEA Coverage:**
+- **✅ Cobertura total: 97.3%** (146/150 linhas)
+- **Classes**: 95.2% (20/21)
+- **Métodos**: 93.5% (43/46)
+- **Branches**: 92.9% (26/28)
+
+**Cobertura por pacote (100% em todos):**
+| Pacote | Linhas Cobertas |
+|--------|-----------------|
+| Controllers | 100% (67/67) |
+| Domain | 100% (49/49) |
+| Security | 100% (19/19) |
+| Services | 100% (10/10) |
+| Config | 100% (1/1) |
+
+**Vantagens:**
+- ✅ Precisão de 97.3% vs 31% do JaCoCo
+- ✅ Compatível com Lombok e transformações Quarkus CDI/AOP
+- ✅ Relatório visual interativo em tempo real
+- ✅ Destaque de linhas cobertas/não cobertas no editor
+
+---
+
+### JaCoCo Code Coverage (Opcional)
+
+**Como executar:**
 
 ```bash
-# No IntelliJ IDEA:
-# 1. Clique com botão direito no projeto
-# 2. Selecione "Run with Coverage"
-# 3. Visualize o relatório na aba "Coverage"
-```
-
-**Métricas IntelliJ IDEA:**
-- **Cobertura total: 97,3%** ✅ (146/150 linhas)
-- **Classes**: 95,2% (20/21)
-- **Métodos**: 93,5% (43/46)
-- **Branches**: 92,9% (26/28)
-
-**Cobertura por pacote:**
-- Controllers: 100% (67/67 linhas)
-- Domain: 100% (49/49 linhas)
-- Security: 100% (19/19 linhas)
-- Services: 100% (10/10 linhas)
-- Config: 100% (1/1 linha)
-
-> 💡 **Recomendação:** Use IntelliJ IDEA Coverage para resultados mais precisos. O JaCoCo pode apresentar warnings de bytecode mismatch devido a transformações CDI/AOP do Quarkus.
-
-### JaCoCo Code Coverage (Alternativa)
-
-Execute os testes com cobertura via JaCoCo:
-
-```bash
-# Gerar relatório de cobertura
+# Gerar relatório de cobertura JaCoCo
 mvn clean test jacoco:report
 
-# Visualizar relatório
-# Abrir em navegador: target/site/jacoco/index.html
+# Visualizar relatório HTML
+start target/site/jacoco/index.html
 ```
 
 **Métricas JaCoCo:**
-- Cobertura total: 31%
+- ⚠️ Cobertura total: **31%** (limitado)
 - Controllers: 40%
 - Security: 78%
 - Domain: 6%
 - Services: 0%
 
-> ⚠️ **Nota:** A cobertura do JaCoCo é inferior devido a incompatibilidades com Lombok e transformações bytecode do Quarkus. Todos os 187 testes estão passando.
+**⚠️ Limitações do JaCoCo:**
+- Incompatibilidade com bytecode gerado por Lombok
+- Incompatibilidade com transformações Quarkus CDI/AOP
+- Relatório impreciso apesar de todos os 187 testes passarem
+- **Use IntelliJ IDEA Coverage para métricas precisas**
 
-### SonarQube Local
+---
+
+### SonarQube Local (Opcional)
 
 Execute análise local com SonarQube:
 
@@ -695,40 +746,62 @@ mvn clean verify sonar:sonar \
   -Dsonar.token=YOUR_TOKEN
 ```
 
-### Executar análise localmente
+---
 
-#### Opção 1: Análise completa (build + testes + SonarQube)
+### Verificação Manual da Aplicação
+
+#### Opção 1: Análise completa (build + testes)
 
 ```bash
-# Executar testes com cobertura
+# Executar build completo com testes
 mvn clean verify
 
-# Executar análise do SonarQube (requer token)
+# Executar análise do SonarQube (opcional - requer token)
 mvn sonar:sonar -Dsonar.token=YOUR_SONAR_TOKEN
 ```
 
-#### Opção 2: Testes manuais com Quarkus rodando
+#### Opção 2: Testes manuais com Quarkus rodando (PowerShell)
 
-Para testar endpoints manualmente, execute o Quarkus em um terminal separado:
+Para testar e verificar endpoints manualmente, execute o Quarkus em um terminal PowerShell separado:
 
-```bash
-# Terminal 1: Iniciar Quarkus em modo dev
+**Terminal 1 (PowerShell): Iniciar Quarkus**
+```powershell
+# Compilar e iniciar Quarkus em modo desenvolvimento
 mvn compile quarkus:dev
+```
 
-# Terminal 2: Executar testes HTTP
-# Testar health check
+**Terminal 2 (PowerShell): Executar verificações HTTP**
+```powershell
+# 1. Testar health check
 Invoke-RestMethod http://localhost:8081/q/health
 
-# Testar login e obter token
+# 2. Fazer login e obter token JWT
 $login = Invoke-RestMethod http://localhost:8081/auth/login -Method Post -Body '{"username":"admin","password":"password123"}' -ContentType "application/json"
 $token = $login.token
 
-# Testar endpoints protegidos
+# 3. Testar endpoint de perfil (protegido)
 Invoke-RestMethod http://localhost:8081/secure/profile -Headers @{Authorization="Bearer $token"}
+
+# 4. Testar endpoint admin (protegido - requer role ADMIN)
 Invoke-RestMethod http://localhost:8081/secure/admin -Headers @{Authorization="Bearer $token"}
+
+# 5. Verificar status da aplicação
+Invoke-RestMethod http://localhost:8081/q/health/live
+Invoke-RestMethod http://localhost:8081/q/health/ready
 ```
 
-**Dica:** Mantenha o Quarkus rodando no Terminal 1 enquanto executa os testes no Terminal 2. O Quarkus ficará disponível em `http://localhost:8081`.
+**📋 Workflow:**
+1. **Terminal 1**: Manter Quarkus rodando em modo dev (`mvn compile quarkus:dev`)
+2. **Terminal 2**: Executar comandos PowerShell para testar endpoints
+3. **Hot Reload**: Alterações no código refletem automaticamente (Terminal 1)
+4. **Verificação**: Validar respostas dos endpoints (Terminal 2)
+
+**💡 Vantagens:**
+- ✅ Testes em tempo real sem rebuild
+- ✅ Quarkus Dev Mode com live reload ativo
+- ✅ Verificação manual de autenticação JWT
+- ✅ Validação de permissões (USER vs ADMIN)
+- ✅ Monitoramento de health checks
 
 ## 📖 Documentação Adicional
 
@@ -748,11 +821,20 @@ Este projeto foi desenvolvido para fins educacionais.
 
 ## 🙏 Agradecimentos
 
-- Projeto migrado com sucesso de **Spring Boot 3.5.0** para **Quarkus 3.8.6**
-- Todos os testes mantidos e funcionando (68/68 ✅)
-- Autenticação JWT RS256 implementada com SmallRye
-- Performance e consumo de memória otimizados
-- Cobertura de testes aumentada de 21% para 31%
+Agradeço especialmente:
+
+- **Minha esposa** - Pelo apoio incondicional e compreensão durante as longas horas de estudo e desenvolvimento
+- **Minha irmã e seu marido** - Pelo incentivo e suporte constante
+- **Meu chefe** - Pela confiança e oportunidade de crescimento profissional
+
+---
+
+**Sobre o Projeto:**
+- Migrado com sucesso de **Spring Boot 3.5.0** para **Quarkus 3.8.6**
+- 187 testes implementados e funcionando (100% ✅)
+- Autenticação JWT RS256 com SmallRye
+- Cobertura de 97.3% (IntelliJ IDEA Coverage)
+- Performance otimizada e consumo de memória reduzido
 - Documentação completa via Postman Collection
 
 ---
