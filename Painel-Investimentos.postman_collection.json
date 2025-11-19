@@ -224,35 +224,6 @@
 				}
 			],
 			"description": "Endpoints públicos (não requerem autenticação)"
-		},
-		{
-			"name": "Documentation",
-			"item": [
-				{
-					"name": "OpenAPI Spec",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8081/openapi",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"openapi"
-							]
-						},
-						"description": "Retorna a especificação OpenAPI 3.0 da API"
-					},
-					"response": []
-				}
-			],
-			"description": "Documentação da API"
 		}
 	]
 }
