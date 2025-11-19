@@ -1,6 +1,6 @@
 # 📋 Análise de Boas Práticas - Painel de Investimentos
 
-**Data da Análise:** 18/11/2025  
+**Data da Análise:** 19/11/2025  
 **Versão do Projeto:** 1.0.0  
 **Framework:** Quarkus 3.8.6  
 **Java:** 21
@@ -21,8 +21,7 @@
 │   ├── request/    ✅ DTOs de entrada
 │   └── response/   ✅ DTOs de saída
 ├── security/       ✅ Camada de segurança
-├── exception/      ✅ Tratamento de exceções
-└── config/         ✅ Configurações
+└── exception/      ✅ Tratamento de exceções
 ```
 
 **Pontos Fortes:**
@@ -214,9 +213,9 @@ quarkus:
 ### 📝 Documentação
 
 #### ✅ **Documentação de API**
-- ✅ OpenAPI annotations
-- ✅ Collection Postman
-- ✅ Exemplos de uso
+- ✅ Postman Collection (documentação primária)
+- ✅ Exemplos de requisições
+- ✅ Testes automatizados de API
 
 #### ✅ **Documentação de Código**
 - ✅ README.md detalhado
@@ -348,7 +347,7 @@ public class GlobalExceptionHandler
 
 ### Documentação
 - [x] README completo
-- [x] API documentada (OpenAPI)
+- [x] API documentada (Postman Collection)
 - [x] Guias de uso
 - [x] Exemplos de código
 - [x] Comentários JavaDoc
@@ -406,7 +405,7 @@ Nenhuma - projeto já está em excelente estado
 | Segurança | JWT + BCrypt | OAuth2 / JWT | ✅ Adequado |
 | Performance | Quarkus Reactive | Spring Boot / Quarkus | ✅ Moderno |
 | Testes | 187 (unitários + integração) | >100 | ✅ Excelente |
-| Documentação | OpenAPI + Postman | OpenAPI | ✅ Adequado |
+| Documentação | Postman Collection | OpenAPI / Postman | ✅ Adequado |
 
 ---
 
@@ -438,6 +437,6 @@ O projeto **Painel de Investimentos** está em **conformidade com as principais 
 O projeto encontra-se pronto para produção, atendendo aos parámetros de boas práticas.
 ---
 
-**Última Atualização:** 18/11/2025  
+**Última Atualização:** 19/11/2025  
 **Reviewer:** GitHub Copilot  
 **Versão do Documento:** 1.0

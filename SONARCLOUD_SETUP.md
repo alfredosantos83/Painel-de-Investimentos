@@ -1,5 +1,7 @@
 # Guia de Configuração do SonarCloud
 
+> **📝 Nota:** SonarCloud é uma ferramenta **opcional** para análise de qualidade de código. O projeto utiliza **IntelliJ IDEA Coverage (97.3%)** como ferramenta principal de cobertura de código. JaCoCo reporta apenas 31% devido a incompatibilidades com Lombok e transformações Quarkus.
+
 ## ✅ Passo 1: Criar Organização (CONCLUÍDO)
 - Name: `alfredosantos83`
 - Key: `alfredosantos83-1`

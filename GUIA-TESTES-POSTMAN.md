@@ -4,7 +4,7 @@
 
 1. **Aplicação rodando**: Execute `mvn quarkus:dev` no terminal
 2. **Postman instalado**: Baixe em https://www.postman.com/downloads/
-3. **Collection importada**: Use o arquivo `Postman-Paginacao-Cache.json`
+3. **Collection importada**: Use o arquivo `Painel-Investimentos.postman_collection.json`
 
 ---
 
@@ -13,7 +13,7 @@
 ### Método 1: Importação Direta
 1. Abra o Postman
 2. Clique em **Import** (canto superior esquerdo)
-3. Arraste o arquivo `Postman-Paginacao-Cache.json` ou clique em **Upload Files**
+3. Arraste o arquivo `Painel-Investimentos.postman_collection.json` ou clique em **Upload Files**
 4. Selecione o arquivo e clique em **Import**
 
 ### Método 2: Via Link
@@ -27,9 +27,9 @@
 
 ### Opção 1: Executar Toda a Collection (Recomendado)
 
-1. Clique com botão direito na collection **"Painel Investimentos - Paginação e Cache"**
+1. Clique com botão direito na collection **"Painel de Investimentos - Quarkus API"**
 2. Selecione **"Run collection"**
-3. Clique em **"Run Painel Investimentos..."**
+3. Clique em **"Run Painel de Investimentos..."****
 4. Veja os resultados em tempo real
 
 **Resultados Esperados:**
@@ -143,7 +143,7 @@ Execute na ordem:
 5. **Diferença**: Quanto maior, melhor está o cache!
 
 ### TTL (Time To Live) dos Caches:
-Configurado em `application.properties`:
+Configurado em `application.yml`:
 
 | Cache | Endpoint | TTL |
 |-------|----------|-----|
@@ -206,7 +206,7 @@ GET /api/products?page=5&size=15
 **Causa**: Dependência não adicionada ou configuração incorreta  
 **Verificar**: 
 1. `pom.xml` tem `quarkus-cache`?
-2. `application.properties` tem configurações de cache?
+2. `application.yml` tem configurações de cache?
 3. `ProductService` tem anotações `@CacheResult`?
 
 ### ⚠️ Tempo de cache não melhora

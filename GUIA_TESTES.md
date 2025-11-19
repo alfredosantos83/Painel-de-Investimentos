@@ -1,5 +1,73 @@
 # 🧪 Guia de Testes - API Painel de Investimentos
 
+## 🚀 Pré-requisitos
+
+Antes de executar os testes, certifique-se de que o Quarkus está rodando.
+
+### Opção 1: Usar Script Automatizado
+
+```powershell
+# Executar script de testes (inicia Quarkus automaticamente)
+.\test-api.ps1
+```
+
+### Opção 2: Testes Manuais com PowerShell (Recomendado para desenvolvimento)
+
+**Terminal 1 (PowerShell): Iniciar Quarkus**
+```powershell
+# Compilar e iniciar Quarkus em modo desenvolvimento
+mvn compile quarkus:dev
+```
+Aguarde até ver: `Listening on: http://localhost:8081`
+
+**Terminal 2 (PowerShell): Executar Testes**
+```powershell
+# Agora execute os comandos de teste deste guia
+# Exemplos abaixo ↓
+```
+
+> **💡 Dica:** Mantenha o Terminal 1 aberto com Quarkus rodando enquanto testa no Terminal 2. O hot reload do Quarkus permite alterações em código sem reiniciar!
+
+### Opção 3: Testes com Postman (Interface Gráfica)
+
+Para testes usando interface gráfica, consulte o guia dedicado:
+📖 **[GUIA-TESTES-POSTMAN.md](GUIA-TESTES-POSTMAN.md)**
+
+### Opção 4: Testes Unitários e Integração com IntelliJ IDEA
+
+**1. Executar Todos os Testes (187 testes)**
+1. Abrir IntelliJ IDEA
+2. Botão direito na pasta `src/test/java`
+3. Selecionar **"Run 'All Tests'"**
+4. Aguardar execução (~58 segundos)
+5. Resultado: 187/187 testes passando (100% ✅)
+
+**2. Executar com Cobertura de Código (Recomendado)**
+1. Botão direito na pasta `src/test/java`
+2. Selecionar **"Run Tests in 'invest' with Coverage"**
+3. Visualizar relatório no painel "Coverage" (lateral direita)
+4. Resultado: **97.3% de cobertura**
+
+**3. Executar Teste Específico**
+1. Abrir classe de teste (ex: `AuthControllerTest.java`)
+2. Clicar no ícone verde ▶️ ao lado da classe ou método
+3. Selecionar **"Run 'AuthControllerTest'"** ou **"Run 'testLogin()'"**
+
+**4. Executar em Modo Debug**
+1. Definir breakpoints (clicar na margem esquerda)
+2. Botão direito no teste
+3. Selecionar **"Debug 'AuthControllerTest'"**
+4. Analisar variáveis e fluxo de execução
+
+**✨ Vantagens IntelliJ:**
+- ✅ Cobertura precisa (97.3% vs 31% JaCoCo)
+- ✅ Interface visual intuitiva
+- ✅ Debug interativo com breakpoints
+- ✅ Execução seletiva (classe, método, pacote)
+- ✅ Relatório de cobertura em tempo real
+
+---
+
 ## 📋 Endpoints Disponíveis
 
 ### Públicos (sem autenticação)

@@ -1,6 +1,6 @@
 # ✅ RELATÓRIO DE TESTES - Paginação e Cache
 
-**Data**: 18/11/2025  
+**Data**: 19/11/2025  
 **Aplicação**: Painel de Investimentos  
 **Versão**: 1.0.0  
 **Framework**: Quarkus 3.8.6
@@ -52,13 +52,25 @@ mvn quarkus:dev
 ```
 **Resultado**: ✅ Aplicação iniciada  
 **Porta**: 8081  
-**Tempo de inicialização**: 4.562s  
+**Tempo de inicialização**: ~3-4 segundos  
 **Features instaladas**:
+- ✅ agroal
 - ✅ cache
+- ✅ cdi
+- ✅ hibernate-orm
 - ✅ hibernate-orm-panache
+- ✅ hibernate-validator
+- ✅ jdbc-h2
+- ✅ narayana-jta
 - ✅ resteasy-reactive
+- ✅ resteasy-reactive-jackson
+- ✅ security
+- ✅ smallrye-context-propagation
+- ✅ smallrye-health
 - ✅ smallrye-jwt
-- ✅ smallrye-openapi
+- ✅ vertx
+
+**📝 Nota**: OpenAPI/Swagger foi removido do projeto. Documentação disponível via Postman Collection.
 
 ---
 

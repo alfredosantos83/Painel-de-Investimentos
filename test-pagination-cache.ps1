@@ -12,7 +12,7 @@ $baseUrl = "http://localhost:8081"
 Write-Host "1. Obtendo token de autenticação..." -ForegroundColor Yellow
 $loginBody = @{
     username = "admin"
-    password = "senha123"
+    password = "password123"
 } | ConvertTo-Json
 
 try {
@@ -140,5 +140,3 @@ Write-Host "✓ Paginação implementada e funcionando" -ForegroundColor Green
 Write-Host "✓ Cache implementado (Caffeine)" -ForegroundColor Green
 Write-Host "✓ Validações de entrada funcionando" -ForegroundColor Green
 Write-Host "✓ Endpoints REST operacionais" -ForegroundColor Green
-Write-Host ""
-Write-Host "Documentação OpenAPI: http://localhost:8081/q/openapi" -ForegroundColor Cyan

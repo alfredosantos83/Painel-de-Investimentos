@@ -1,16 +1,16 @@
 # Painel de Investimentos - Quarkus
 
-API de análise de perfil de risco e simulação de investimentos migrada para **Quarkus 3.16.3**.
+API de análise de perfil de risco e simulação de investimentos migrada para **Quarkus 3.8.6 LTS**.
 
 ## 🚀 Tecnologias
 
 - **Java 21**
-- **Quarkus 3.16.3** (anteriormente Spring Boot 3.5.0)
+- **Quarkus 3.8.6 LTS** (anteriormente Spring Boot 3.5.0)
 - **Hibernate ORM with Panache** (substituindo Spring Data JPA)
 - **RESTEasy Reactive** (substituindo Spring MVC)
 - **SmallRye JWT** (substituindo Spring Security + JJWT)
-- **SQLite** (banco de dados)
-- **SmallRye OpenAPI**
+- **H2 Database** (in-memory para desenvolvimento e testes)
+- **Postman Collection** (documentação da API)
 - **Maven 3.9.6**
 - **Docker** (containerização)
 
@@ -26,7 +26,7 @@ API de análise de perfil de risco e simulação de investimentos migrada para *
 | **Segurança** | Spring Security + JJWT | SmallRye JWT (MicroProfile JWT) |
 | **Configuração** | `application.yml` | `application.properties` |
 | **Validação** | `jakarta.validation` | `jakarta.validation` (sem mudanças) |
-| **Documentação API** | SpringDoc OpenAPI | SmallRye OpenAPI |
+| **Documentação API** | SpringDoc OpenAPI | Postman Collection |
 
 ### Hibernate Panache - Active Record Pattern
 
@@ -198,7 +198,7 @@ docker build -f src/main/docker/Dockerfile.native -t painel-investimentos:native
 | `QUARKUS_HTTP_PORT` | Porta HTTP | 8081 |
 | `JWT_SECRET` | Secret para JWT | (valor padrão) |
 | `JWT_EXPIRATION` | Tempo de expiração JWT (ms) | 86400000 (24h) |
-| `QUARKUS_DATASOURCE_JDBC_URL` | URL do banco | jdbc:sqlite:investimentos.db |
+| `QUARKUS_DATASOURCE_JDBC_URL` | URL do banco | jdbc:h2:mem:investimentos |
 
 ## 🎯 Benefícios da Migração para Quarkus
 
@@ -241,17 +241,18 @@ O projeto inclui workflows para:
 
 ## 🔄 Migration Notes
 
-Esta aplicação foi migrada de **Spring Boot 3.5.0** para **Quarkus 3.16.3** mantendo todas as funcionalidades:
+Esta aplicação foi migrada de **Spring Boot 3.5.0** para **Quarkus 3.8.6 LTS** mantendo todas as funcionalidades:
 
-- ✅ Autenticação JWT
-- ✅ Validação de entrada
-- ✅ Persistência com Hibernate
-- ✅ Endpoints REST
-- ✅ Documentação OpenAPI
-- ✅ Health checks
-- ✅ Métricas e telemetria
-- ✅ Suporte a Docker
-- ✅ Integração com SonarCloud
+- ✅ Autenticação JWT RS256 com SmallRye JWT
+- ✅ Validação de entrada (Jakarta Validation)
+- ✅ Persistência com Hibernate ORM Panache
+- ✅ Endpoints REST com RESTEasy Reactive
+- ✅ Documentação via Postman Collection
+- ✅ Health checks (liveness/readiness)
+- ✅ Banco H2 in-memory
+- ✅ Suporte a Docker (JVM e Native)
+- ✅ 187 testes unitários e integração (100%)
+- ✅ Cobertura de código: 97.3% (IntelliJ IDEA Coverage)
 
 ## 📄 Licença
 

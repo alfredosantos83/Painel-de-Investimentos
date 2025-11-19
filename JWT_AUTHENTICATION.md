@@ -23,7 +23,7 @@ jwt.expiration=86400000
 ## 🚀 Endpoints Disponíveis
 
 ### 1. Autenticação (Público)
-#### POST `/api/auth/login`
+#### POST `/auth/login`
 Autentica usuário e retorna token JWT.
 
 **Request:**
@@ -94,7 +94,7 @@ Endpoint exclusivo para administradores.
 ### 1. Login e Obter Token
 ```powershell
 $body = @{username='admin'; password='password123'} | ConvertTo-Json
-$response = Invoke-RestMethod -Uri 'http://localhost:8081/api/auth/login' `
+$response = Invoke-RestMethod -Uri 'http://localhost:8081/auth/login' `
     -Method POST -Body $body -ContentType 'application/json'
 $token = $response.token
 ```
@@ -144,7 +144,6 @@ Invoke-RestMethod -Uri 'http://localhost:8081/api/secure/admin' `
 ```java
 @RolesAllowed({"USER", "ADMIN"})  // Múltiplas roles
 @RolesAllowed("ADMIN")            // Apenas ADMIN
-@SecurityRequirement(name = "bearer-jwt")  // OpenAPI
 ```
 
 ### Injeção de JWT

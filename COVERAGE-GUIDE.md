@@ -79,7 +79,7 @@ mvn clean verify sonar:sonar `
 - **Total de Testes:** 187
 - **Sucessos:** 187 (100%)
 - **Falhas:** 0
-- **Cobertura JaCoCo:** ~63% (subestimada)
+- **Cobertura JaCoCo:** 31% (limitações com Lombok/Quarkus bytecode)
 - **Cobertura Real (IntelliJ):** **97,3%** ✅
 
 ### Cobertura Real por Módulo (IntelliJ Coverage)
@@ -143,25 +143,6 @@ mvn clean verify sonar:sonar `
 
 ---
 
-## 🚀 Próximos Passos para Melhorar Cobertura
-
-1. **Controllers** (40% → 80%)
-   - Adicionar testes de erro handling
-   - Testar validações de input
-   - Testar edge cases
-
-2. **Services** (0% → 60%)
-   - Criar testes unitários com mocks
-   - Testar lógica de negócio isoladamente
-   - Testar tratamento de exceções
-
-3. **Repositories** (0% → 40%)
-   - Testar queries customizadas
-   - Testar filtros e ordenações
-   - Testes de integração com H2
-
----
-
 ## 📚 Referências
 
 - [JaCoCo Documentation](https://www.jacoco.org/jacoco/trunk/doc/)
@@ -171,7 +152,7 @@ mvn clean verify sonar:sonar `
 
 ---
 
-**Última atualização:** 18/11/2025  
+**Última atualização:** 19/11/2025  
 **Versão do projeto:** 1.0.0  
 **Framework:** Quarkus 3.8.6  
 **Java:** 21
