@@ -1,6 +1,31 @@
 # 🧪 Guia de Testes - API Painel de Investimentos
 
-## 🚀 Pré-requisitos
+
+## 🗄️ Exemplo de Configuração para SQL Server
+
+Para rodar com SQL Server, configure o `application.yml`:
+```yaml
+quarkus:
+  datasource:
+    db-kind: mssql
+    jdbc:
+      url: jdbc:sqlserver://localhost:1433;databaseName=investimentos
+    username: sa
+    password: sua_senha
+  hibernate-orm:
+    database:
+      generation: update
+    sql-load-script: data.sql
+```
+
+Adicione ao `pom.xml`:
+```xml
+<dependency>
+  <groupId>com.microsoft.sqlserver</groupId>
+  <artifactId>mssql-jdbc</artifactId>
+  <version>12.6.1.jre11</version>
+</dependency>
+```
 
 Antes de executar os testes, certifique-se de que o Quarkus está rodando.
 
@@ -46,7 +71,7 @@ Para testes usando interface gráfica, consulte o guia dedicado:
 1. Botão direito na pasta `src/test/java`
 2. Selecionar **"Run Tests in 'invest' with Coverage"**
 3. Visualizar relatório no painel "Coverage" (lateral direita)
-4. Resultado: **97.3% de cobertura**
+4. Resultado: **Cobertura oficial (IntelliJ 97,3%)**
 
 **3. Executar Teste Específico**
 1. Abrir classe de teste (ex: `AuthControllerTest.java`)
@@ -61,10 +86,11 @@ Para testes usando interface gráfica, consulte o guia dedicado:
 
 **✨ Vantagens IntelliJ:**
 ✅ Cobertura precisa (97.3% vs 52% JaCoCo)
-- ✅ Interface visual intuitiva
-- ✅ Debug interativo com breakpoints
-- ✅ Execução seletiva (classe, método, pacote)
-- ✅ Relatório de cobertura em tempo real
+**Nota:** Resultados do IntelliJ IDEA Coverage são a métrica oficial para documentação, compliance e apresentação.
+✅ Interface visual intuitiva
+✅ Debug interativo com breakpoints
+✅ Execução seletiva (classe, método, pacote)
+✅ Relatório de cobertura em tempo real
 
 ---
 

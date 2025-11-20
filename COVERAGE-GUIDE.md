@@ -73,14 +73,31 @@ mvn clean verify sonar:sonar `
 
 ---
 
-## 📈 Status Atual do Projeto
+
+## 🗄️ Exemplo de Configuração para SQL Server
+
+Para produção, recomenda-se o uso de SQL Server. Exemplo de configuração no `application.yml`:
+```yaml
+quarkus:
+  datasource:
+    db-kind: mssql
+    jdbc:
+      url: jdbc:sqlserver://localhost:1433;databaseName=investimentos
+    username: sa
+    password: sua_senha
+  hibernate-orm:
+    database:
+      generation: update
+    sql-load-script: data.sql
+```
+
+Para testes/desenvolvimento, pode-se usar H2 (in-memory).
 
 ### Métricas de Testes
 **Total de Testes:** 187
 **Sucessos:** 187 (100%)
 - **Falhas:** 0
-- **Cobertura JaCoCo:** 31% (limitações com Lombok/Quarkus bytecode)
-- **Cobertura Real (IntelliJ):** **97,3%** ✅
+- **Cobertura Real (IntelliJ - Oficial):** **97,3%** ✅
 
 ### Cobertura Real por Módulo (IntelliJ Coverage)
 | Pacote | Classes | Métodos | Branches | Linhas |
@@ -92,14 +109,14 @@ mvn clean verify sonar:sonar `
 | **Config** | 100% (1/1) | 100% (1/1) | - | **100%** (1/1) ✅ |
 | **Application** | 0% (0/1) | 0% (0/3) | - | 0% (0/4) ⚠️ |
 
+
 ### Resumo Geral
 - **Classes:** 95,2% (20/21)
 - **Métodos:** 93,5% (43/46)
 - **Branches:** 92,9% (26/28)
 - **Linhas:** **97,3%** (146/150)
 
-### Quality Gates
-- ✅ Cobertura mínima: 60%
+- ✅ Cobertura mínima: 97% (IntelliJ)
 - ✅ Zero bugs críticos
 - ✅ Zero vulnerabilidades de segurança
 - ✅ Duplicação de código: <3%
@@ -130,7 +147,17 @@ mvn clean verify sonar:sonar `
 
 ---
 
+
 ## 📝 Recomendações
+
+**Dica:** Para usar SQL Server, instale o driver JDBC no `pom.xml`:
+```xml
+<dependency>
+  <groupId>com.microsoft.sqlserver</groupId>
+  <artifactId>mssql-jdbc</artifactId>
+  <version>12.6.1.jre11</version>
+</dependency>
+```
 
 ### Para Desenvolvimento Local
 👉 **Use IntelliJ IDEA Coverage** para análise rápida e precisa
@@ -156,3 +183,5 @@ mvn clean verify sonar:sonar `
 **Versão do projeto:** 1.0.0  
 **Framework:** Quarkus 3.8.6  
 **Java:** 21
+
+**Nota:** Resultados do IntelliJ IDEA Coverage são a métrica oficial para documentação, compliance e apresentação.

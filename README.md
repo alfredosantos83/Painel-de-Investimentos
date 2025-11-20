@@ -2,11 +2,17 @@
 
 API REST desenvolvida em Java 21 com **Quarkus 3.8.6** para análise de perfil de risco e simulação de investimentos.
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos83_Painel-de-Investimentos&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=alfredosantos83_Painel-de-Investimentos)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos83_Painel-de-Investimentos&metric=coverage)](https://sonarcloud.io/summary/new_code?id=alfredosantos83_Painel-de-Investimentos)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos83_Painel-de-Investimentos&metric=bugs)](https://sonarcloud.io/summary/new_code?id=alfredosantos83_Painel-de-Investimentos)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=alfredosantos83_Painel-de-Investimentos&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=alfredosantos83_Painel-de-Investimentos)
+
 > 🚀 **Migrado de Spring Boot para Quarkus** - Aplicação modernizada com startup ultra-rápido e menor consumo de memória.
 
 ## 📋 Descrição
 
 Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamente seu perfil de risco, sugerindo produtos de investimento como CDBs, LCIs, LCAs, Tesouro Direto, Fundos, etc.
+
 
 ### Funcionalidades Principais
 
@@ -19,7 +25,8 @@ Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamen
 - ✅ Documentação via Postman Collection
 - ✅ Containerização com Docker
 - ✅ Testes unitários e integração (187 testes, 100% passando)
-- ✅ Cobertura de código - **97,3%** (IntelliJ Coverage)
+ ✅ Cobertura de código - **97,3% (IntelliJ Coverage - Oficial)**
+ **SonarCloud:** Para compliance, utilize o resultado do IntelliJ Coverage como métrica principal. O valor do JaCoCo pode ser citado apenas como referência técnica secundária.
 - ✅ Análise de qualidade com SonarQube
 
 ## 🚀 Tecnologias
@@ -34,19 +41,20 @@ Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamen
 - **Postman** (API Testing & Documentation)
 - **Docker & Docker Compose**
 - **JUnit 5** + **Mockito** + **RestAssured**
-- **IntelliJ IDEA Coverage** (Code Coverage - 97.3%)
-- **JaCoCo** (Code Coverage opcional - 52% - Cobertura real do último relatório)
+- **IntelliJ IDEA Coverage** (Cobertura oficial - 97,3%)
 - **SonarQube** (Code Quality & Security Analysis - opcional)
 - **Maven 3.9.6**
 
 ## 📊 Qualidade e Cobertura de Código
 
+
 ### Métricas de Testes
 - **Total de Testes:** 187
 - **Taxa de Sucesso:** 100%
-- **Cobertura de Código:** 97,3%
+- **Cobertura de Código:** 97,3% (IntelliJ - Oficial)
 
 ### Cobertura Detalhada (IntelliJ Coverage)
+
 
 | Pacote | Classes | Métodos | Branches | Linhas |
 |--------|---------|---------|----------|--------|
@@ -59,6 +67,7 @@ Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamen
 
 ### Executar Testes e Cobertura
 
+
 #### Opção 1: IntelliJ IDEA (Recomendado)
 
 **Executar Todos os Testes com Cobertura:**
@@ -69,7 +78,7 @@ Sistema que analisa o comportamento financeiro do cliente e ajusta automaticamen
 5. Visualizar relatório detalhado no painel "Coverage" (lateral direita)
 
 **Vantagens:**
-- ✅ 97.3% de cobertura precisa (vs 52% do JaCoCo)
+- ✅ 97,3% de cobertura precisa (vs 52% do JaCoCo)
 - ✅ Compatível com Lombok e transformações Quarkus CDI/AOP
 - ✅ Relatório visual interativo em tempo real
 - ✅ Destaque de linhas cobertas/não cobertas no editor
@@ -94,7 +103,7 @@ mvn clean test jacoco:report
 start target/site/jacoco/index.html
 ```
 
-**⚠️ Limitação:** JaCoCo reporta apenas 52% de cobertura devido a incompatibilidade com bytecode gerado por Lombok e transformações Quarkus. Use IntelliJ IDEA Coverage para métricas precisas.
+**⚠️ Limitação:** JaCoCo reporta apenas 52% de cobertura devido a incompatibilidade com bytecode gerado por Lombok e transformações Quarkus. Use **IntelliJ IDEA Coverage** como métrica oficial para documentação, compliance e apresentação.
 
 #### Análise SonarQube (Opcional)
 
@@ -145,13 +154,17 @@ docker-compose down
 
 A aplicação estará disponível em: `http://localhost:8081`
 
+
 **Endpoints disponíveis:**
 - API: `http://localhost:8081`
 - Health Check: `http://localhost:8081/health` ✅
 - Login: `http://localhost:8081/auth/login`
 - Produtos: `http://localhost:8081/api/products/*` (requer autenticação)
+- Todos os endpoints das especificações estão implementados e testados.
 
 ## 📚 Documentação da API
+
+**Última atualização:** 19/11/2025
 
 ### 🧪 Testando com Postman
 
@@ -593,31 +606,35 @@ start target/site/jacoco/index.html
 
 ## 📊 Banco de Dados
 
-O projeto usa **H2 Database** (in-memory) para desenvolvimento e testes:
 
+O projeto suporta **SQL Server** para produção, além de H2 (in-memory) para testes e desenvolvimento.
+
+**Exemplo de configuração para SQL Server (application.yml):**
+```yaml
+quarkus:
+  datasource:
+    db-kind: mssql
+    jdbc:
+      url: jdbc:sqlserver://localhost:1433;databaseName=investimentos
+    username: sa
+    password: sua_senha
+  hibernate-orm:
+    database:
+      generation: update
+    sql-load-script: data.sql
+```
+
+Para testes e desenvolvimento, pode-se usar H2:
 ```yaml
 quarkus:
   datasource:
     db-kind: h2
     jdbc:
       url: jdbc:h2:mem:investimentos;DB_CLOSE_DELAY=-1
-      
   hibernate-orm:
     database:
       generation: drop-and-create
     sql-load-script: data.sql
-```
-
-Para produção, pode ser configurado para PostgreSQL, MySQL ou SQL Server:
-
-```yaml
-quarkus:
-  datasource:
-    db-kind: postgresql
-    jdbc:
-      url: jdbc:postgresql://localhost:5432/investimentos
-    username: postgres
-    password: your_password
 ```
 
 ## 🐳 Docker
@@ -672,7 +689,8 @@ painel-investimentos/
 
 - [x] API em Java 21 com Quarkus 3.8.6
 - [x] Envelope JSON de entrada/saída
-- [x] Banco de dados H2 (in-memory)
+- [x] Banco de dados H2 (in-memory) para testes/desenvolvimento
+- [x] Banco de dados SQL Server para produção
 - [x] Validação de dados
 - [x] Filtro de produtos adequados
 - [x] Cálculos de simulação

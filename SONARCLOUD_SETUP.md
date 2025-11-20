@@ -1,6 +1,6 @@
 # Guia de Configuração do SonarCloud
 
-> **📝 Nota:** SonarCloud é uma ferramenta **opcional** para análise de qualidade de código. O projeto utiliza **IntelliJ IDEA Coverage (97.3%)** como ferramenta principal de cobertura de código. JaCoCo reporta apenas 52% devido a incompatibilidades com Lombok e transformações Quarkus.
+> **📝 Nota:** SonarCloud é uma ferramenta **opcional** para análise de qualidade de código. O projeto utiliza **IntelliJ IDEA Coverage (97,3%)** como métrica oficial de cobertura de código. JaCoCo pode ser ignorado para compliance.
 
 ## ✅ Passo 1: Criar Organização (CONCLUÍDO)
 - Name: `alfredosantos83`
@@ -31,7 +31,32 @@ Após criar a organização, siga estes passos:
 4. Valor: Cole o token copiado do SonarCloud
 5. Clique em **"Add secret"**
 
-## 🚀 Passo 5: Executar Análise
+
+## 🗄️ Exemplo de Configuração para SQL Server
+
+Se for usar SQL Server, configure o `application.yml` conforme exemplo:
+```yaml
+quarkus:
+   datasource:
+      db-kind: mssql
+      jdbc:
+         url: jdbc:sqlserver://localhost:1433;databaseName=investimentos
+      username: sa
+      password: sua_senha
+   hibernate-orm:
+      database:
+         generation: update
+      sql-load-script: data.sql
+```
+
+Adicione o driver JDBC ao `pom.xml`:
+```xml
+<dependency>
+   <groupId>com.microsoft.sqlserver</groupId>
+   <artifactId>mssql-jdbc</artifactId>
+   <version>12.6.1.jre11</version>
+</dependency>
+```
 
 ### Opção A: Via GitHub Actions (Automático)
 Faça um push para o repositório e o workflow executará automaticamente:
@@ -59,7 +84,8 @@ Você verá:
 - Security Hotspots
 - Duplicações
 
-## 🎯 Badges para o README
+
+## 🏆 Badges para o README
 
 Após a primeira análise, adicione estes badges ao README.md:
 
@@ -84,6 +110,9 @@ Após a primeira análise, adicione estes badges ao README.md:
 1. Acesse: **Project Settings > Notifications**
 2. Configure notificações por email quando Quality Gate falhar
 
+
 ## 🎉 Pronto!
 
 Seu projeto agora está totalmente integrado com SonarCloud e terá análises automáticas a cada push!
+
+**Última atualização:** 19/11/2025

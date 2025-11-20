@@ -28,6 +28,18 @@ services:
       - "com.docker.compose.project=painel-investimentos"
       - "description=Painel de Investimentos - Quarkus 3.8.6 LTS"
 
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong!Passw0rd
+    ports:
+      - "1433:1433"
+    networks:
+      - invest-network
+    restart: unless-stopped
+
 networks:
   invest-network:
     driver: bridge

@@ -1,8 +1,8 @@
 # 🧪 Script de Testes - API Painel de Investimentos
 # Execute: .\test-api.ps1
 
-Write-Host "🧪 Executando Suite de Testes da API..." -ForegroundColor Cyan
-Write-Host "=" * 60
+Write-Host "Executando Suite de Testes da API..." -ForegroundColor Cyan
+Write-Host ("".PadLeft(60, '='))
 
 # 1. Health Check
 Write-Host "`n1️⃣ Health Check" -ForegroundColor Yellow
@@ -45,10 +45,10 @@ try {
 Write-Host "`n4️⃣ Perfil Admin" -ForegroundColor Yellow
 try {
     $headers = @{Authorization = "Bearer $adminToken"}
-    $profile = Invoke-RestMethod -Uri 'http://localhost:8081/secure/profile' -Headers $headers
-    Write-Host "   ✅ Username: $($profile.username)" -ForegroundColor Green
-    Write-Host "   ✅ Email: $($profile.email)" -ForegroundColor Green
-    Write-Host "   ✅ Roles: $($profile.roles -join ', ')" -ForegroundColor Green
+    $adminProfile = Invoke-RestMethod -Uri 'http://localhost:8081/secure/profile' -Headers $headers
+    Write-Host "   Username: $($adminProfile.username)" -ForegroundColor Green
+    Write-Host "   Email: $($adminProfile.email)" -ForegroundColor Green
+    Write-Host "   Roles: $($adminProfile.roles -join ', ')" -ForegroundColor Green
 } catch {
     Write-Host "   ❌ ERRO: $($_.Exception.Message)" -ForegroundColor Red
 }
@@ -129,6 +129,7 @@ try {
     }
 }
 
-Write-Host "`n" + ("=" * 60)
-Write-Host "✨ Todos os testes executados com sucesso!" -ForegroundColor Green
-Write-Host "=" * 60
+Write-Host ""
+Write-Host ("".PadLeft(60, '='))
+Write-Host "Todos os testes executados com sucesso!" -ForegroundColor Green
+Write-Host ("".PadLeft(60, '='))
