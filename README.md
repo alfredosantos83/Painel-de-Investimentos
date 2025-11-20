@@ -758,3 +758,4 @@ Este projeto foi desenvolvido para fins educacionais.
 ---
 
 ⭐ Se este projeto foi útil, considere dar uma estrela no GitHub!
+# PAINEL-INVESTIMENTO-PERFIL
